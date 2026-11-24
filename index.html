@@ -6,7 +6,7 @@
   <title>River Watch — Flood Response Decision-Support Tool</title>
   <style>
     :root {
-      --bg: #0b1120; --panel: #111827; --card: #1e293b; --border: #334155;
+      --bg: #0b1120; --card: #1e293b; --border: #334155;
       --text: #f8fafc; --muted: #94a3b8; --accent: #38bdf8;
       --normal: #22c55e; --standby: #f59e0b; --barriers: #ef4444;
     }
@@ -23,26 +23,21 @@
       background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.45);
       color: #fde68a; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; margin-bottom: 18px;
     }
-    .grid-top { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
-    @media (max-width: 900px) { .grid-top { grid-template-columns: 1fr; } }
     .card {
       background: var(--card); border: 1px solid var(--border); border-radius: 10px;
       padding: 16px; margin-bottom: 18px;
     }
     .card h2 { margin: 0 0 10px; font-size: 1.08rem; color: var(--accent); }
-    label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 4px; }
-    select, input, textarea {
+    input {
       width: 100%; background: #0f172a; color: var(--text); border: 1px solid var(--border);
-      border-radius: 6px; padding: 9px 11px; font-size: 0.9rem; margin-bottom: 10px;
+      border-radius: 6px; padding: 10px 12px; font-size: 0.92rem;
     }
-    .row-btns { display: flex; flex-wrap: wrap; gap: 8px; }
     button {
       background: var(--accent); color: #0f172a; border: none; padding: 9px 14px;
       border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.88rem;
     }
     button:disabled { opacity: 0.45; cursor: not-allowed; }
     button.secondary { background: #0f172a; color: var(--text); border: 1px solid var(--border); }
-    button.danger { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
     .pill {
       display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 0.76rem; font-weight: 700;
     }
@@ -68,7 +63,6 @@
     table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
     th, td { padding: 8px 9px; text-align: left; border-bottom: 1px solid var(--border); }
     th { color: var(--accent); white-space: nowrap; }
-    .meta-strip { font-size: 0.82rem; color: var(--muted); margin-top: 8px; }
     details { margin-top: 10px; font-size: 0.84rem; color: var(--muted); }
     pre.audit {
       background: #020617; border: 1px solid var(--border); padding: 10px;
@@ -92,47 +86,15 @@
     <strong>Operational Notice:</strong> AI can make mistakes; a person makes the final decision. River Watch recommends levels and crew deployments against Flood Plan v2026/27—the Duty Officer decides by 16:00 and never dispatches a crew automatically.
   </div>
 
-  <div class="grid-top">
-    <div class="card" style="margin-bottom:0">
-      <h2>1. AI Brain Settings (Stored in Your Browser Only)</h2>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <div>
-          <label for="providerSelect">AI Provider</label>
-          <select id="providerSelect" onchange="onProviderChange()">
-            <option value="gemini" selected>Google Gemini (gemini-2.5-flash)</option>
-            <option value="openai">OpenAI (gpt-4o-mini)</option>
-            <option value="anthropic">Anthropic (claude-3-5-haiku-latest)</option>
-            <option value="groq">Groq (llama-3.3-70b-versatile)</option>
-          </select>
-        </div>
-        <div>
-          <label for="modelInput">Model ID</label>
-          <input id="modelInput" type="text" value="gemini-2.5-flash" />
-        </div>
-      </div>
-      <label for="apiKeyInput">API Key (saved only in browser localStorage; never uploaded)</label>
-      <input id="apiKeyInput" type="password" placeholder="Paste your API key here..." />
-      <div class="row-btns">
-        <button onclick="saveKey()">Save Key</button>
-        <button class="danger" onclick="forgetKey()">Forget Key</button>
-        <span id="keyStatus" style="font-size:0.82rem; color:var(--muted); align-self:center;"></span>
-      </div>
-    </div>
-
-    <div class="card" style="margin-bottom:0">
-      <h2>2. Live Data Sources Status</h2>
-      <div id="sourceStatus" style="font-size:0.86rem; color:var(--muted); line-height:1.65;">
-        Initializing live source check...
-      </div>
-      <div class="meta-strip">
-        Team Sheet: <a href="https://docs.google.com/spreadsheets/d/1pfxwjqCAVfWoldCQrrML6JX8aD_PjOWZaEef_Hm3U74/edit" target="_blank" style="color:var(--accent)">RiverWatch_Team_Sheet</a> ·
-        Forecast: Open-Meteo GloFAS v4 · Warnings: Met Éireann JSON
-      </div>
+  <div class="card">
+    <h2>1. Live Data Sources &amp; AI Backend Status</h2>
+    <div id="sourceStatus" style="font-size:0.86rem; color:var(--muted); line-height:1.65;">
+      Initializing live source check...
     </div>
   </div>
 
   <div class="card">
-    <h2>3. Ask River Watch (Duty Officer &amp; Area Manager Console)</h2>
+    <h2>2. Ask River Watch (Duty Officer &amp; Area Manager Console)</h2>
     <div class="presets">
       <button onclick="askPreset('What is tonight\'s plan?')">What is tonight's plan?</button>
       <button onclick="askPreset('Why is Fermoy at that level?')">Why is Fermoy at that level?</button>
@@ -144,19 +106,19 @@
     <div class="chat-box" id="chatBox">
       <div class="msg">
         <div class="msg-role">System</div>
-        <div class="msg-body">Paste your API key above (or run a live data refresh), then click a question or type your own below. Every question re-reads your Google Sheet, Open-Meteo river forecasts, and Met Éireann warnings live.</div>
+        <div class="msg-body">Connected to live Google Sheet, Open-Meteo GloFAS forecasts, Met Éireann warnings, and server-side Groq AI proxy. Click a question above or type your own below.</div>
       </div>
     </div>
 
     <div style="display:flex; gap:10px;">
-      <input id="questionInput" type="text" style="margin-bottom:0" placeholder="Ask about tonight's plan, a specific town, a what-if flow, or the flood-defence study..." onkeydown="if(event.key==='Enter') sendQuestion()" />
+      <input id="questionInput" type="text" placeholder="Ask about tonight's plan, a specific town, a what-if flow, or the flood-defence study..." onkeydown="if(event.key==='Enter') sendQuestion()" />
       <button id="askBtn" onclick="sendQuestion()" style="white-space:nowrap;">Ask River Watch</button>
       <button class="secondary" onclick="clearChat()" style="white-space:nowrap;">Clear</button>
     </div>
   </div>
 
   <div class="card">
-    <h2>4. Working Shown — Live Computed Flood Plan State</h2>
+    <h2>3. Working Shown — Live Computed Flood Plan State</h2>
     <div class="table-wrap">
       <table>
         <thead>
@@ -185,11 +147,13 @@
 </div>
 
 <script>
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzi49lNsMYCjZAdXSVZDR2f31lNS8JEuvP8mzJVuyWg4OXckB40g2_l3jvBhDbfX1_f/exec";
+  const GROQ_MODEL = "openai/gpt-oss-120b";
+
   const SHEET_ID = "1pfxwjqCAVfWoldCQrrML6JX8aD_PjOWZaEef_Hm3U74";
   const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
   const MET_WARNINGS_URL = "https://www.met.ie/Open_Data/json/warning_IRELAND.json";
 
-  // Fallback verified channel coordinates in case history_summary.json is not yet loaded
   const DEFAULT_TOWNS = [
     { town: "Clonmel", counties: ["Tipperary"], river: "Suir", lat: 52.375, lon: -7.725, p95: 66.3, p99: 107.88 },
     { town: "Fermoy", counties: ["Cork"], river: "Blackwater", lat: 52.175, lon: -8.275, p95: 72.0, p99: 115.0 },
@@ -211,55 +175,8 @@
     "EI30": "Wexford", "EI31": "Wicklow"
   };
 
-  const PROVIDER_DEFAULTS = {
-    gemini: "gemini-2.5-flash",
-    openai: "gpt-4o-mini",
-    anthropic: "claude-3-5-haiku-latest",
-    groq: "llama-3.3-70b-versatile"
-  };
-
   let chatHistory = [];
-  let latestComputedState = null;
 
-  function initSettings() {
-    const savedProvider = localStorage.getItem("rw_provider") || "gemini";
-    const savedModel = localStorage.getItem("rw_model") || PROVIDER_DEFAULTS[savedProvider];
-    const savedKey = localStorage.getItem("rw_api_key") || "";
-    document.getElementById("providerSelect").value = savedProvider;
-    document.getElementById("modelInput").value = savedModel;
-    document.getElementById("apiKeyInput").value = savedKey;
-    updateKeyStatus();
-  }
-
-  function onProviderChange() {
-    const p = document.getElementById("providerSelect").value;
-    document.getElementById("modelInput").value = PROVIDER_DEFAULTS[p];
-  }
-
-  function saveKey() {
-    const p = document.getElementById("providerSelect").value;
-    const m = document.getElementById("modelInput").value.trim();
-    const k = document.getElementById("apiKeyInput").value.trim();
-    localStorage.setItem("rw_provider", p);
-    localStorage.setItem("rw_model", m);
-    if (k) localStorage.setItem("rw_api_key", k);
-    updateKeyStatus();
-  }
-
-  function forgetKey() {
-    localStorage.removeItem("rw_api_key");
-    document.getElementById("apiKeyInput").value = "";
-    updateKeyStatus();
-  }
-
-  function updateKeyStatus() {
-    const k = localStorage.getItem("rw_api_key");
-    document.getElementById("keyStatus").textContent = k
-      ? `Key saved in browser (${k.slice(0, 4)}...${k.slice(-4)})`
-      : "No API key stored in browser.";
-  }
-
-  // RFC-4180 compliant CSV parser
   function parseCsv(text) {
     const rows = [];
     let row = [], cell = "", inQuotes = false;
@@ -297,11 +214,9 @@
   }
 
   async function fetchLiveSheet() {
-    const url = `${SHEET_CSV_URL}&t=${Date.now()}`;
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(`${SHEET_CSV_URL}&t=${Date.now()}`, { cache: "no-store" });
     if (!res.ok) throw new Error(`Google Sheet HTTP ${res.status}`);
-    const csvText = await res.text();
-    const parsed = parseCsv(csvText);
+    const parsed = parseCsv(await res.text());
     const validTownNames = new Set(DEFAULT_TOWNS.map(t => t.town.toLowerCase()));
     return parsed.filter(r => validTownNames.has((r.town || "").toLowerCase()));
   }
@@ -405,14 +320,12 @@
         lon: hTown?.verified_channel_coords?.lon ?? def.lon,
         p95: hTown?.p95_m3s ?? def.p95,
         p99: hTown?.p99_m3s ?? def.p99,
-        median: hTown?.median_m3s ?? null,
         winterStudy: hTown?.winter_study_2016_2025 ?? null
       };
     });
 
     const forecasts = await fetchLiveForecasts(townConfigs);
 
-    // Step 1: Evaluate each town's flow, warnings, overrides, and initial level
     const townsEvaluated = townConfigs.map((cfg, idx) => {
       const sheet = sheetRows.find(r => r.town.toLowerCase() === cfg.town.toLowerCase()) || {};
       const fc = forecasts[idx] || {};
@@ -427,24 +340,20 @@
         }
       });
 
-      // Extract second county from notes if mentioned (e.g., Athlone, Carrick-on-Shannon)
       const notes = sheet.notes || "";
       const counties = [...cfg.counties];
       if (/roscommon/i.test(notes) && !counties.includes("Roscommon")) counties.push("Roscommon");
 
-      // Rule 5: Rehearsal flow_override_m3s
       const rawFlowOverride = String(sheet.flow_override_m3s || "").trim();
       const hasFlowOverride = rawFlowOverride !== "" && !isNaN(Number(rawFlowOverride));
       const effectivePeak = hasFlowOverride ? Number(rawFlowOverride) : livePeak;
 
-      // Rule 2 & 3: Base level from percentiles
       let baseLevel = "Normal";
       if (effectivePeak !== null) {
         if (effectivePeak >= cfg.p99) baseLevel = "Barriers";
         else if (effectivePeak >= cfg.p95) baseLevel = "Standby";
       }
 
-      // Rule 4 & 5: Live Met Éireann warnings + warning_override
       const liveWarnings = getTownWarnings(counties, warningsObj.list, nowMs);
       const rainWarnings = liveWarnings.filter(w => w.isRain);
       let highestLiveWarning = "None";
@@ -472,7 +381,6 @@
         town: cfg.town,
         counties,
         river: cfg.river,
-        coords: { lat: cfg.lat, lon: cfg.lon },
         p95_m3s: cfg.p95,
         p99_m3s: cfg.p99,
         live_3day_forecast: dailyTimes.map((d, i) => ({ date: d, discharge_m3s: dailyFlows[i] })),
@@ -498,7 +406,6 @@
       };
     });
 
-    // Step 2: Rule 6 & 7 Crew Allocation & Barrier Set Constraints
     const mallowNote = townsEvaluated.find(t => t.town === "Mallow")?.notes || "";
     const mallowLocalOnly = /mallow only|van in repair/i.test(mallowNote);
 
@@ -508,13 +415,11 @@
       { name: "Athlone Crew", base: "Athlone", zone: ["Athlone", "Carrick-on-Shannon", "Ennis"], capacity: 2, assigned: [] }
     ];
 
-    // Sort Barriers towns by % above 99th percentile descending, tie-break by higher effective peak
     const barrierCandidates = townsEvaluated
       .filter(t => t.recommended_level === "Barriers" && t.can_have_barriers)
       .sort((a, b) => (b.pct_above_p99 - a.pct_above_p99) || (b.effective_peak_m3s - a.effective_peak_m3s));
 
     for (const townObj of barrierCandidates) {
-      // Prefer a crew with available capacity; if Fermoy is eligible for both Clonmel and Mallow, pick the crew with more remaining capacity (or local base first)
       const eligible = crews
         .filter(c => c.zone.includes(townObj.town) && c.assigned.length < c.capacity)
         .sort((a, b) => (b.base === townObj.town ? 1 : 0) - (a.base === townObj.town ? 1 : 0) || (b.capacity - b.assigned.length) - (a.capacity - a.assigned.length));
@@ -525,7 +430,6 @@
       }
     }
 
-    // Finalize operational actions and Area Manager flags
     for (const t of townsEvaluated) {
       if (t.recommended_level === "Normal") {
         t.operational_action = "Normal monitoring; no standby or barrier deployment required.";
@@ -544,7 +448,6 @@
       }
     }
 
-    // Step 3: Rule 8 Area Manager's 9-Winter Flood Study Summary
     const studyRanking = townConfigs
       .filter(c => c.winterStudy)
       .map(c => ({
@@ -555,8 +458,7 @@
         first_4_winters_2016_17_to_2019_20: c.winterStudy.first4Events,
         middle_winter_2020_21: c.winterStudy.middleWinter2020_21,
         last_4_winters_2021_22_to_2024_25: c.winterStudy.last4Events,
-        last_4_more_than_first_4: c.winterStudy.last4HigherThanFirst4,
-        by_winter: c.winterStudy.winters
+        last_4_more_than_first_4: c.winterStudy.last4HigherThanFirst4
       }))
       .sort((a, b) => b.total_events_2016_17_to_2024_25 - a.total_events_2016_17_to_2024_25);
 
@@ -566,7 +468,7 @@
         google_sheet_csv: SHEET_CSV_URL,
         river_forecast_api: "https://flood-api.open-meteo.com/v1/flood (GloFAS v4)",
         weather_warnings_api: `${MET_WARNINGS_URL} (${warningsObj.via})`,
-        historical_summary_file: histJson ? `history_summary.json (generated ${histJson.generated_at_utc})` : "Fallback embedded thresholds (upload history_summary.json!)"
+        historical_summary_file: histJson ? `history_summary.json (generated ${histJson.generated_at_utc})` : "Fallback embedded thresholds"
       },
       national_active_warnings_count: warningsObj.list.length,
       towns: townsEvaluated,
@@ -583,15 +485,15 @@
       }
     };
 
-    latestComputedState = state;
     renderPlanTable(state);
     return state;
   }
 
   function renderPlanTable(state) {
     document.getElementById("sourceStatus").innerHTML =
-      `<strong>Last Live Fetch:</strong> ${state.fetched_at_utc}<br>` +
-      `<strong>History File:</strong> ${state.sources.historical_summary_file}<br>` +
+      `<strong>Last Live Fetch:</strong> ${state.fetched_at_utc} &nbsp;|&nbsp; ` +
+      `<strong>AI Backend:</strong> Google Apps Script Server-Side Proxy (${GROQ_MODEL} on GroqCloud)<br>` +
+      `<strong>History File:</strong> ${state.sources.historical_summary_file} &nbsp;|&nbsp; ` +
       `<strong>Met Éireann Feed:</strong> ${state.sources.weather_warnings_api} (${state.national_active_warnings_count} active warnings)`;
 
     const tbody = document.getElementById("planTableBody");
@@ -643,68 +545,15 @@ LIVE VERIFIED FLOOD PLAN STATE (JSON):
 ${JSON.stringify(state)}`;
   }
 
-  async function callLlm(provider, model, apiKey, systemPrompt, messages) {
-    if (provider === "gemini") {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-      const contents = messages.map(m => ({
-        role: m.role === "assistant" ? "model" : "user",
-        parts: [{ text: m.content }]
-      }));
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: systemPrompt }] },
-          contents,
-          generationConfig: { temperature: 0.2 }
-        })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error?.message || `Gemini HTTP ${res.status}`);
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response returned.";
-    }
-
-    if (provider === "openai" || provider === "groq") {
-      const endpoint = provider === "openai"
-        ? "https://api.openai.com/v1/chat/completions"
-        : "https://api.groq.com/openai/v1/chat/completions";
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-        body: JSON.stringify({
-          model,
-          temperature: 0.2,
-          messages: [{ role: "system", content: systemPrompt }, ...messages]
-        })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error?.message || `${provider} HTTP ${res.status}`);
-      return data.choices?.[0]?.message?.content || "No response returned.";
-    }
-
-    if (provider === "anthropic") {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01",
-          "anthropic-dangerous-direct-browser-access": "true"
-        },
-        body: JSON.stringify({
-          model,
-          max_tokens: 1400,
-          temperature: 0.2,
-          system: systemPrompt,
-          messages
-        })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error?.message || `Anthropic HTTP ${res.status}`);
-      return data.content?.[0]?.text || "No response returned.";
-    }
-
-    throw new Error("Unsupported provider.");
+  async function callServerProxy(systemPrompt, messages) {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ model: GROQ_MODEL, systemPrompt, messages })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    return data.reply || "No response returned.";
   }
 
   function appendMessage(role, text) {
@@ -733,25 +582,15 @@ ${JSON.stringify(state)}`;
     const question = input.value.trim();
     if (!question) return;
 
-    const apiKey = document.getElementById("apiKeyInput").value.trim() || localStorage.getItem("rw_api_key");
-    if (!apiKey) {
-      alert("Please paste your API key in Section 1 first.");
-      return;
-    }
-
-    const provider = document.getElementById("providerSelect").value;
-    const model = document.getElementById("modelInput").value.trim() || PROVIDER_DEFAULTS[provider];
-
     input.value = "";
     btn.disabled = true;
     appendMessage("user", question);
     chatHistory.push({ role: "user", content: question });
 
     try {
-      // Re-read Sheet and every live source at the exact moment of the question
       const freshState = await computeLiveFloodPlan();
       const systemPrompt = buildSystemPrompt(freshState);
-      const reply = await callLlm(provider, model, apiKey, systemPrompt, chatHistory);
+      const reply = await callServerProxy(systemPrompt, chatHistory);
       chatHistory.push({ role: "assistant", content: reply });
       appendMessage("assistant", reply);
     } catch (err) {
@@ -761,7 +600,6 @@ ${JSON.stringify(state)}`;
     }
   }
 
-  initSettings();
   refreshLiveSnapshot();
 </script>
 </body>
