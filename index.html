@@ -3,360 +3,298 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>River Watch — Irish Flood Response Decision Support</title>
+  <title>River Watch — Irish Flood Response Operations</title>
   <style>
     :root {
       --bg: #f1f5f9;
       --surface: #ffffff;
-      --surface-soft: #f8fafc;
+      --surface-alt: #f8fafc;
       --border: #e2e8f0;
+      --border-strong: #cbd5e1;
       --text: #0f172a;
-      --muted: #475569;
-      --primary: #0369a1;
-      --primary-hover: #075985;
-      --normal-bg: #dcfce7;
-      --normal-text: #166534;
-      --normal-bar: #16a34a;
-      --standby-bg: #fef3c7;
+      --text-secondary: #334155;
+      --muted: #64748b;
+      --ocean-dark: #0b192c;
+      --ocean-mid: #0e4d64;
+      --ocean-accent: #0284c7;
+      --ocean-hover: #0369a1;
+      --normal-bg: #ecfdf5;
+      --normal-border: #a7f3d0;
+      --normal-text: #065f46;
+      --normal-bar: #10b981;
+      --standby-bg: #fffbeb;
+      --standby-border: #fde68a;
       --standby-text: #92400e;
-      --standby-bar: #d97706;
-      --barriers-bg: #fee2e2;
+      --standby-bar: #f59e0b;
+      --barriers-bg: #fef2f2;
+      --barriers-border: #fecaca;
       --barriers-text: #991b1b;
-      --barriers-bar: #dc2626;
+      --barriers-bar: #ef4444;
       --rehearsal-bg: #f3e8ff;
       --rehearsal-text: #6b21a8;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
     }
 
     * {
       box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
       background: var(--bg);
       color: var(--text);
       margin: 0;
-      padding: 20px 16px 40px;
+      padding: 0 0 48px;
       line-height: 1.5;
     }
 
-    .container {
-      max-width: 1180px;
-      margin: 0 auto;
+    /* Hero Header */
+    .hero {
+      background: linear-gradient(135deg, var(--ocean-dark) 0%, var(--ocean-mid) 58%, var(--ocean-accent) 100%);
+      color: #ffffff;
+      padding: 24px 20px 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
 
-    /* Header */
-    .topbar {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px 22px;
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .hero-inner {
+      max-width: 1320px;
+      margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
       gap: 14px;
-      margin-bottom: 14px;
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
     }
 
-    .brand h1 {
+    .brand-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-group h1 {
       margin: 0;
-      font-size: 1.45rem;
-      color: var(--text);
-      letter-spacing: -0.01em;
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
     }
 
-    .brand p {
-      margin: 3px 0 0;
-      color: var(--muted);
+    .brand-group p {
+      margin: 2px 0 0;
       font-size: 0.9rem;
+      color: rgba(241, 245, 249, 0.85);
     }
 
-    .topbar-actions {
+    .hero-controls {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    .live-badge {
+    .status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      background: var(--surface-soft);
-      border: 1px solid var(--border);
-      padding: 6px 12px;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 7px 14px;
       border-radius: 999px;
       font-size: 0.82rem;
-      color: var(--muted);
+      color: #f8fafc;
+      backdrop-filter: blur(6px);
     }
 
-    .live-dot {
+    .pulse-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #16a34a;
+      background: #34d399;
+      box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25);
     }
 
-    /* Notice Banner */
-    .notice {
+    .btn-hero {
+      background: #ffffff;
+      color: var(--ocean-dark);
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.12s ease, background 0.15s ease;
+    }
+
+    .btn-hero:hover {
+      background: #f0f9ff;
+      transform: translateY(-1px);
+    }
+
+    /* Notice Strip */
+    .notice-bar {
       background: #fffbeb;
       border: 1px solid #fde68a;
       border-left: 4px solid #d97706;
       color: #78350f;
       padding: 11px 16px;
-      border-radius: 8px;
-      font-size: 0.88rem;
-      margin-bottom: 18px;
+      border-radius: 10px;
+      font-size: 0.87rem;
+      margin: 18px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
     }
 
-    /* Summary KPI Grid */
+    /* KPI Summary Cards */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-bottom: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
     }
 
     .kpi-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 15px 18px;
-      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+      border-top: 3px solid var(--ocean-accent);
+      transition: box-shadow 0.15s ease;
+    }
+
+    .kpi-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-card.Normal { border-top-color: var(--normal-bar); }
+    .kpi-card.Standby { border-top-color: var(--standby-bar); }
+    .kpi-card.Barriers { border-top-color: var(--barriers-bar); }
+
+    .kpi-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
     }
 
     .kpi-label {
-      font-size: 0.78rem;
-      font-weight: 600;
+      font-size: 0.76rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
       color: var(--muted);
-      margin-bottom: 4px;
     }
 
     .kpi-value {
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: var(--text);
+      line-height: 1.2;
     }
 
     .kpi-sub {
       font-size: 0.82rem;
       color: var(--muted);
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
-    /* Main Sections */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px 22px;
+    /* Main Workspace Grid */
+    .workspace {
+      display: grid;
+      grid-template-columns: 1.38fr 1fr;
+      gap: 18px;
+      align-items: start;
       margin-bottom: 18px;
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
     }
 
-    .card-header {
-      margin-bottom: 14px;
+    @media (max-width: 1060px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
     }
 
-    .card-header h2 {
-      margin: 0;
-      font-size: 1.12rem;
-      color: var(--text);
-    }
-
-    .card-header p {
-      margin: 3px 0 0;
-      font-size: 0.88rem;
-      color: var(--muted);
-    }
-
-    /* Buttons & Inputs */
-    button {
-      background: var(--primary);
-      color: #ffffff;
-      border: none;
-      padding: 9px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.88rem;
-      cursor: pointer;
-      transition: background 0.15s ease;
-    }
-
-    button:hover:not(:disabled) {
-      background: var(--primary-hover);
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    button.secondary {
+    .panel {
       background: var(--surface);
-      color: var(--text);
       border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
     }
 
-    button.secondary:hover:not(:disabled) {
-      background: var(--surface-soft);
-    }
-
-    /* Preset Chips */
-    .preset-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .presets {
+    .panel-head {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .presets button {
-      background: var(--surface-soft);
-      color: var(--text);
-      border: 1px solid var(--border);
-      font-weight: 500;
-      font-size: 0.84rem;
-      padding: 7px 13px;
-      border-radius: 999px;
-    }
-
-    .presets button:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      background: #f0f9ff;
-    }
-
-    /* Chat Area */
-    .chat-box {
-      background: var(--surface-soft);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      min-height: 150px;
-      max-height: 480px;
-      overflow-y: auto;
-      margin-bottom: 12px;
-    }
-
-    .msg {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 15px;
-      margin-bottom: 12px;
-    }
-
-    .msg:last-child {
-      margin-bottom: 0;
-    }
-
-    .msg.user-msg {
-      background: #f0f9ff;
-      border-color: #bae6fd;
-    }
-
-    .msg-role {
-      font-size: 0.76rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      color: var(--primary);
-      margin-bottom: 5px;
-    }
-
-    .msg.user-msg .msg-role {
-      color: #0369a1;
-    }
-
-    .msg-body {
-      font-size: 0.92rem;
-      color: var(--text);
-      line-height: 1.55;
-    }
-
-    .msg-body p {
-      margin: 0 0 8px;
-    }
-
-    .msg-body p:last-child {
-      margin-bottom: 0;
-    }
-
-    .msg-body h4 {
-      margin: 10px 0 6px;
-      font-size: 0.96rem;
-      color: var(--text);
-    }
-
-    .msg-body ul {
-      margin: 4px 0 8px;
-      padding-left: 20px;
-    }
-
-    .msg-body li {
-      margin-bottom: 4px;
-    }
-
-    .msg-body hr {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 10px 0;
-    }
-
-    .ai-table-wrap {
-      overflow-x: auto;
-      margin: 8px 0;
-    }
-
-    .ai-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.83rem;
-      background: var(--surface);
-    }
-
-    .ai-table th,
-    .ai-table td {
-      border: 1px solid var(--border);
-      padding: 6px 9px;
-      text-align: left;
-    }
-
-    .ai-table th {
-      background: var(--surface-soft);
-      font-weight: 600;
-    }
-
-    .input-row {
-      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
       gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
     }
 
-    input {
-      flex: 1;
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .panel-head p {
+      margin: 2px 0 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* Filter Tabs */
+    .filter-tabs {
+      display: inline-flex;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .filter-tab {
+      background: transparent;
+      color: var(--muted);
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .filter-tab.active {
       background: var(--surface);
       color: var(--text);
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 0.92rem;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(3, 105, 161, 0.12);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
     }
 
     /* Town Table */
@@ -367,24 +305,24 @@
     table.town-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.87rem;
+      font-size: 0.86rem;
     }
 
     table.town-table th {
-      background: var(--surface-soft);
+      background: var(--surface-alt);
       color: var(--muted);
-      font-weight: 600;
-      font-size: 0.78rem;
+      font-weight: 700;
+      font-size: 0.74rem;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
-      padding: 10px 12px;
+      letter-spacing: 0.04em;
+      padding: 9px 10px;
       text-align: left;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
 
     table.town-table td {
-      padding: 12px;
+      padding: 12px 10px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
     }
@@ -397,75 +335,316 @@
       background: #f8fafc;
     }
 
+    .river-tag {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 5px;
+      margin-top: 3px;
+    }
+
+    /* 3-Day Mini Spark Bars + Threshold Gauge */
+    .flow-cell {
+      min-width: 145px;
+    }
+
+    .flow-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .spark-bars {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 18px;
+    }
+
+    .spark-bar {
+      width: 6px;
+      background: #94a3b8;
+      border-radius: 2px 2px 0 0;
+      min-height: 4px;
+    }
+
+    .spark-bar.peak {
+      background: var(--ocean-accent);
+    }
+
+    .gauge-track {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .gauge-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .gauge-fill.Normal { background: var(--normal-bar); }
+    .gauge-fill.Standby { background: var(--standby-bar); }
+    .gauge-fill.Barriers { background: var(--barriers-bar); }
+
     /* Status Badges */
     .badge {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       padding: 3px 10px;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: 0.77rem;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .badge.Normal {
       background: var(--normal-bg);
       color: var(--normal-text);
+      border: 1px solid var(--normal-border);
     }
 
     .badge.Standby {
       background: var(--standby-bg);
       color: var(--standby-text);
+      border: 1px solid var(--standby-border);
     }
 
     .badge.Barriers {
       background: var(--barriers-bg);
       color: var(--barriers-text);
+      border: 1px solid var(--barriers-border);
     }
 
     .badge.rehearsal {
       background: var(--rehearsal-bg);
       color: var(--rehearsal-text);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
+      padding: 2px 7px;
       margin-left: 4px;
     }
 
-    /* Visual Flow Bar */
-    .flow-meter {
-      width: 130px;
-      height: 7px;
-      background: #e2e8f0;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 5px;
-    }
-
-    .flow-fill {
-      height: 100%;
-      border-radius: 999px;
-    }
-
-    .flow-fill.Normal { background: var(--normal-bar); }
-    .flow-fill.Standby { background: var(--standby-bar); }
-    .flow-fill.Barriers { background: var(--barriers-bar); }
-
-    /* Legend & Footer Audit */
-    .legend {
+    .asset-strip {
       display: flex;
       flex-wrap: wrap;
-      gap: 16px;
-      font-size: 0.82rem;
+      gap: 6px;
+      margin-top: 4px;
+      font-size: 0.75rem;
       color: var(--muted);
-      margin-top: 12px;
-      padding-top: 12px;
+    }
+
+    .asset-chip {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* Crew Readiness Strip */
+    .crew-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+      padding-top: 14px;
       border-top: 1px solid var(--border);
     }
 
+    .crew-box {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 12px;
+      font-size: 0.81rem;
+    }
+
+    .crew-box strong {
+      display: block;
+      color: var(--text);
+      font-size: 0.84rem;
+    }
+
+    /* AI Assistant Console */
+    .console-panel {
+      position: sticky;
+      top: 16px;
+    }
+
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .preset-btn {
+      background: var(--surface-alt);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .preset-btn:hover {
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+      color: var(--ocean-hover);
+    }
+
+    .chat-box {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      min-height: 280px;
+      max-height: 500px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .msg {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--ocean-mid);
+      border-radius: 10px;
+      padding: 11px 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .msg.user-msg {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      border-left: 3px solid var(--ocean-accent);
+      align-self: flex-end;
+      max-width: 92%;
+    }
+
+    .msg-role {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--ocean-mid);
+      margin-bottom: 4px;
+    }
+
+    .msg.user-msg .msg-role {
+      color: var(--ocean-hover);
+    }
+
+    .msg-body {
+      font-size: 0.89rem;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .msg-body p { margin: 0 0 7px; }
+    .msg-body p:last-child { margin-bottom: 0; }
+    .msg-body h4 { margin: 9px 0 5px; font-size: 0.93rem; }
+    .msg-body ul { margin: 4px 0 8px; padding-left: 18px; }
+    .msg-body li { margin-bottom: 3px; }
+    .msg-body hr { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
+
+    .ai-table-wrap { overflow-x: auto; margin: 7px 0; }
+    .ai-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .ai-table th, .ai-table td { border: 1px solid var(--border); padding: 5px 8px; text-align: left; }
+    .ai-table th { background: var(--surface-alt); font-weight: 600; }
+
+    /* Typing Indicator */
+    .typing-dots {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+      padding: 4px 0;
+    }
+    .typing-dots span {
+      width: 7px;
+      height: 7px;
+      background: var(--ocean-accent);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    input {
+      flex: 1;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      padding: 10px 13px;
+      font-size: 0.89rem;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--ocean-accent);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.14);
+    }
+
+    .btn-primary {
+      background: var(--ocean-accent);
+      color: #ffffff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.87rem;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-primary:hover:not(:disabled) { background: var(--ocean-hover); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-ghost {
+      background: var(--surface);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-strong);
+      padding: 9px 13px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .btn-ghost:hover { background: var(--surface-alt); }
+
+    /* Technical Audit Collapsible */
     details.audit-panel {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 14px 18px;
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       color: var(--muted);
+      box-shadow: var(--shadow-sm);
     }
 
     details.audit-panel summary {
@@ -475,136 +654,171 @@
     }
 
     pre.audit-json {
-      background: #0f172a;
+      background: var(--ocean-dark);
       color: #e2e8f0;
       padding: 12px;
       border-radius: 8px;
       overflow-x: auto;
       max-height: 260px;
-      font-size: 0.8rem;
+      font-size: 0.79rem;
       margin-top: 10px;
     }
   </style>
 </head>
 <body>
-<div class="container">
 
-  <!-- Top Header -->
-  <header class="topbar">
-    <div class="brand">
-      <h1>River Watch</h1>
-      <p>Flood Response Decision-Support Dashboard · 8-Town Irish Council Team</p>
-    </div>
-    <div class="topbar-actions">
-      <div class="live-badge">
-        <span class="live-dot"></span>
-        <span id="lastUpdatedBadge">Checking live feeds...</span>
+  <!-- Hero Banner -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand-group">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+            <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+            <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+          </svg>
+        </div>
+        <div>
+          <h1>River Watch</h1>
+          <p>Irish 8-Town Flood Response &amp; Decision-Support Dashboard · Flood Plan v2026/27</p>
+        </div>
       </div>
-      <button type="button" id="refreshBtn" class="secondary">Refresh Data</button>
+
+      <div class="hero-controls">
+        <div class="status-pill">
+          <span class="pulse-dot"></span>
+          <span id="lastUpdatedBadge">Connecting to live river feeds...</span>
+        </div>
+        <button type="button" id="refreshBtn" class="btn-hero">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+          </svg>
+          Refresh Live Feeds
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Plain-English Decision Disclaimer -->
-  <div class="notice">
-    <strong>Human Decision Notice:</strong> River Watch checks live river forecasts, weather warnings, and team resources against Flood Plan v2026/27. <strong>The Duty Officer makes the final decision by 16:00</strong>—no crew is ever dispatched automatically.
-  </div>
+  <div class="container">
 
-  <!-- At-a-Glance Summary Strip -->
-  <div class="kpi-grid" id="summaryCards">
-    <div class="kpi-card">
-      <div class="kpi-label">Overall Status</div>
-      <div class="kpi-value">Loading...</div>
-      <div class="kpi-sub">Checking 8 towns</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Barriers Needed</div>
-      <div class="kpi-value">—</div>
-      <div class="kpi-sub">High-flow alert</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Standby Watch</div>
-      <div class="kpi-value">—</div>
-      <div class="kpi-sub">Elevated flow or warning</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Mobile Crews Active</div>
-      <div class="kpi-value">—</div>
-      <div class="kpi-sub">3 regional crews available</div>
-    </div>
-  </div>
-
-  <!-- Interactive Assistant -->
-  <section class="card">
-    <div class="card-header">
-      <h2>Ask River Watch</h2>
-      <p>Click a common question below or type your own question in plain English.</p>
-    </div>
-
-    <div class="preset-label">Quick Questions:</div>
-    <div class="presets">
-      <button type="button" class="preset-btn" data-q="What is tonight's plan?">Tonight's Action Plan</button>
-      <button type="button" class="preset-btn" data-q="Why is Fermoy at that level?">Why is Fermoy at this level?</button>
-      <button type="button" class="preset-btn" data-q="What if the Suir at Clonmel reaches 150 m3/s?">What-If: Clonmel at 150 m³/s</button>
-      <button type="button" class="preset-btn" data-q="Which town should be first in line for a flood-defence study?">Flood-Defence Study Priority</button>
-      <button type="button" class="preset-btn" data-q="Will my house in Mallow flood tonight?">Public Query: My house in Mallow</button>
-    </div>
-
-    <div class="chat-box" id="chatBox">
-      <div class="msg">
-        <div class="msg-role">River Watch Assistant</div>
-        <div class="msg-body">
-          <p>Ready. I have checked live river forecasts, Met Éireann warnings, and your team's Google Sheet. Click any quick question above or ask a question below.</p>
-        </div>
+    <!-- Human Sign-Off Notice -->
+    <div class="notice-bar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <div>
+        <strong>Human Decision Reminder:</strong> River Watch checks live river forecasts, Met Éireann warnings, and team resources against Flood Plan v2026/27. <strong>The Duty Officer makes the final call by 16:00</strong>—no crew is ever dispatched automatically.
       </div>
     </div>
 
-    <div class="input-row">
-      <input id="questionInput" type="text" placeholder="Type a question (e.g. What is tonight's plan? or How are crews assigned?)..." />
-      <button type="button" id="askBtn">Ask</button>
-      <button type="button" id="clearBtn" class="secondary">Clear</button>
-    </div>
-  </section>
-
-  <!-- Town-by-Town Status Table -->
-  <section class="card">
-    <div class="card-header">
-      <h2>Town-by-Town River &amp; Resource Status</h2>
-      <p>Live 3-day peak river discharge compared against each town's Flood Plan thresholds.</p>
-    </div>
-
-    <div class="table-wrap">
-      <table class="town-table">
-        <thead>
-          <tr>
-            <th>Town &amp; River</th>
-            <th>3-Day Peak Flow</th>
-            <th>Flood Thresholds</th>
-            <th>Weather Warning</th>
-            <th>Action Level</th>
-            <th>Crew &amp; Recommended Action</th>
-          </tr>
-        </thead>
-        <tbody id="planTableBody">
-          <tr><td colspan="6" style="color:var(--muted)">Loading live town status...</td></tr>
-        </tbody>
-      </table>
+    <!-- At-a-Glance Summary Strip -->
+    <div class="kpi-grid" id="summaryCards">
+      <div class="kpi-card">
+        <div class="kpi-top"><span class="kpi-label">Network Status</span></div>
+        <div class="kpi-value">Checking...</div>
+        <div class="kpi-sub">Evaluating 8 towns</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top"><span class="kpi-label">Barriers Required</span></div>
+        <div class="kpi-value">—</div>
+        <div class="kpi-sub">High-flow alert</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top"><span class="kpi-label">Standby Watch</span></div>
+        <div class="kpi-value">—</div>
+        <div class="kpi-sub">Elevated flow or warning</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-top"><span class="kpi-label">Mobile Crews</span></div>
+        <div class="kpi-value">—</div>
+        <div class="kpi-sub">3 regional response units</div>
+      </div>
     </div>
 
-    <div class="legend">
-      <span><strong>Normal:</strong> Below Standby threshold</span>
-      <span><strong>Standby:</strong> At/above Standby threshold (or Orange/Red rain warning)</span>
-      <span><strong>Barriers:</strong> At/above Barrier threshold — deploy barriers before 18:00</span>
+    <!-- Main Two-Column Workspace -->
+    <div class="workspace">
+
+      <!-- Left Column: Town & Crew Monitor -->
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Town-by-Town River &amp; Resource Monitor</h2>
+            <p>Live 3-day river discharge peaks compared against Flood Plan thresholds.</p>
+          </div>
+          <div class="filter-tabs" role="tablist">
+            <button type="button" class="filter-tab active" data-filter="all">All Towns (8)</button>
+            <button type="button" class="filter-tab" data-filter="alert">Alerts &amp; Standby</button>
+            <button type="button" class="filter-tab" data-filter="Normal">Normal</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="town-table">
+            <thead>
+              <tr>
+                <th>Town &amp; River</th>
+                <th>3-Day Peak Flow</th>
+                <th>Thresholds</th>
+                <th>Action Level</th>
+                <th>Recommended Action &amp; Assets</th>
+              </tr>
+            </thead>
+            <tbody id="planTableBody">
+              <tr><td colspan="5" style="color:var(--muted)">Loading live river forecasts and team sheet...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Regional Crews Status Strip -->
+        <div class="crew-grid" id="crewStrip"></div>
+      </section>
+
+      <!-- Right Column: AI Decision Assistant -->
+      <section class="panel console-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Ask River Watch</h2>
+            <p>Ask about tonight's plan, crew rules, what-if flows, or flood studies.</p>
+          </div>
+        </div>
+
+        <div class="presets">
+          <button type="button" class="preset-btn" data-q="What is tonight's plan?">Tonight's Plan</button>
+          <button type="button" class="preset-btn" data-q="Why is Fermoy at that level?">Why Fermoy?</button>
+          <button type="button" class="preset-btn" data-q="What if the Suir at Clonmel reaches 150 m3/s?">What-If: Clonmel 150 m³/s</button>
+          <button type="button" class="preset-btn" data-q="Which town should be first in line for a flood-defence study?">Flood-Defence Study</button>
+          <button type="button" class="preset-btn" data-q="Will my house in Mallow flood tonight?">House in Mallow?</button>
+        </div>
+
+        <div class="chat-box" id="chatBox">
+          <div class="msg">
+            <div class="msg-role">River Watch Assistant</div>
+            <div class="msg-body">
+              <p>Live river forecasts, Met Éireann warnings, and your Google Sheet are connected. Click any quick question above or type your own question below.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <input id="questionInput" type="text" placeholder="Ask a question in plain English..." />
+          <button type="button" id="askBtn" class="btn-primary">Ask</button>
+          <button type="button" id="clearBtn" class="btn-ghost">Clear</button>
+        </div>
+      </section>
+
     </div>
-  </section>
 
-  <!-- Technical Audit Collapsible -->
-  <details class="audit-panel">
-    <summary>Data Sources &amp; Technical Audit Trail (For Verification &amp; Marking)</summary>
-    <div id="sourceStatus" style="margin-top:10px; line-height:1.6;">Loading source status...</div>
-    <pre class="audit-json" id="auditJson">Waiting for live data...</pre>
-  </details>
+    <!-- Technical Audit Collapsible -->
+    <details class="audit-panel">
+      <summary>Technical Audit Trail &amp; Live Data Sources (For Verification &amp; Marking)</summary>
+      <div id="sourceStatus" style="margin-top:10px; line-height:1.65;">Loading source verification details...</div>
+      <pre class="audit-json" id="auditJson">Waiting for live evaluation...</pre>
+    </details>
 
-</div>
+  </div>
 
 <script>
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzi49lNsMYCjZAdXSVZDR2f31lNS8JEuvP8mzJVuyWg4OXckB40g2_l3jvBhDbfX1_f/exec";
@@ -636,6 +850,8 @@
   };
 
   let chatHistory = [];
+  let latestState = null;
+  let currentFilter = "all";
 
   function escapeHtml(str) {
     return String(str)
@@ -767,13 +983,13 @@
   }
 
   async function fetchLiveWarnings() {
-    let data = null, via = "Direct Met Eireann JSON";
+    let data = null, via = "Direct Met Éireann JSON";
     try {
       const res = await fetch(MET_WARNINGS_URL + "?t=" + Date.now(), { cache: "no-store" });
       if (!res.ok) throw new Error("HTTP " + res.status);
       data = await res.json();
     } catch (e) {
-      via = "Met Eireann JSON (via CORS proxy)";
+      via = "Met Éireann JSON (via CORS proxy)";
       const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(MET_WARNINGS_URL);
       const res = await fetch(proxyUrl, { cache: "no-store" });
       if (!res.ok) throw new Error("Warnings proxy HTTP " + res.status);
@@ -981,15 +1197,15 @@
     for (let m = 0; m < townsEvaluated.length; m++) {
       const t = townsEvaluated[m];
       if (t.recommended_level === "Normal") {
-        t.operational_action = "Routine monitoring only";
+        t.operational_action = "Routine river monitoring only";
       } else if (t.recommended_level === "Standby") {
-        t.operational_action = "Standby: " + t.staff_on_call + " staff on call, check " + t.pumps + " pumps & " + t.sandbags + " sandbags";
+        t.operational_action = "Standby watch: confirm staff on call, check pumps & stage sandbags";
       } else if (t.recommended_level === "Barriers") {
         if (!t.can_have_barriers) {
           t.area_manager_flag = true;
           t.operational_action = "Escalate to Area Manager (no barrier set available) + Standby measures";
         } else if (t.assigned_crew) {
-          t.operational_action = "Deploy " + t.assigned_crew + " to erect " + t.barrier_sets_available + " barrier set before 18:00";
+          t.operational_action = "Deploy " + t.assigned_crew + " to erect barrier set before 18:00";
         } else {
           t.area_manager_flag = true;
           t.operational_action = "Escalate to Area Manager (no crew capacity in zone) + Standby measures";
@@ -1031,91 +1247,147 @@
       }
     };
 
+    latestState = state;
     renderDashboard(state);
     return state;
   }
 
+  function renderTownRows(state) {
+    const tbody = document.getElementById("planTableBody");
+    const filtered = state.towns.filter(function (t) {
+      if (currentFilter === "all") return true;
+      if (currentFilter === "alert") return t.recommended_level !== "Normal";
+      return t.recommended_level === currentFilter;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:24px;">No towns currently in this filter category.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(function (t) {
+      const maxScale = Math.max(t.p99_m3s * 1.15, (t.effective_peak_m3s || 0) * 1.1, 1);
+      const pctBar = t.effective_peak_m3s !== null ? Math.min(100, Math.max(6, Math.round((t.effective_peak_m3s / maxScale) * 100))) : 0;
+
+      // 3-Day Mini Spark Bars
+      const fcMax = Math.max.apply(null, t.live_3day_forecast.map(function (d) { return d.discharge_m3s || 0; }).concat([1]));
+      const sparkHtml = t.live_3day_forecast.map(function (d) {
+        const val = d.discharge_m3s || 0;
+        const h = Math.max(4, Math.round((val / fcMax) * 18));
+        const isPeak = d.date === t.live_peak_date ? " peak" : "";
+        return '<div class="spark-bar' + isPeak + '" style="height:' + h + 'px" title="' + d.date + ': ' + val + ' m³/s"></div>';
+      }).join("");
+
+      const peakMeta = t.rehearsal_flow_used
+        ? '<span class="badge rehearsal">Test Override</span>'
+        : '<div style="color:var(--muted);font-size:0.75rem;margin-top:2px">Peak ' + (t.live_peak_date || "N/A") + '</div>';
+
+      const warnBadge = t.effective_warning !== "None"
+        ? '<div style="margin-top:4px;font-size:0.76rem;color:#b45309;font-weight:600">' + t.effective_warning + ' Rain Warning' + (t.rehearsal_warning_used ? ' (Test)' : '') + '</div>'
+        : '';
+
+      const noteHtml = t.notes && t.notes !== "Normal service"
+        ? '<div style="color:#b45309;font-size:0.75rem;margin-top:3px">⚠ ' + escapeHtml(t.notes) + '</div>'
+        : '';
+
+      return '<tr>' +
+        '<td>' +
+          '<strong>' + escapeHtml(t.town) + '</strong><br>' +
+          '<span class="river-tag">River ' + escapeHtml(t.river) + '</span> ' +
+          '<span style="color:var(--muted);font-size:0.76rem">' + escapeHtml(t.counties.join(", ")) + '</span>' +
+        '</td>' +
+        '<td class="flow-cell">' +
+          '<div class="flow-top">' +
+            '<strong>' + (t.effective_peak_m3s !== null ? t.effective_peak_m3s + ' m³/s' : 'N/A') + '</strong>' +
+            '<div class="spark-bars" aria-label="3-day flow trend">' + sparkHtml + '</div>' +
+          '</div>' +
+          peakMeta +
+          '<div class="gauge-track"><div class="gauge-fill ' + t.recommended_level + '" style="width:' + pctBar + '%"></div></div>' +
+        '</td>' +
+        '<td style="font-size:0.79rem;color:var(--muted);white-space:nowrap">' +
+          'Standby: <strong style="color:var(--text)">' + t.p95_m3s + '</strong><br>' +
+          'Barriers: <strong style="color:var(--text)">' + t.p99_m3s + '</strong>' +
+        '</td>' +
+        '<td>' +
+          '<span class="badge ' + t.recommended_level + '">' + t.recommended_level + '</span>' +
+          warnBadge +
+        '</td>' +
+        '<td style="font-size:0.82rem">' +
+          '<div>' + escapeHtml(t.operational_action) + '</div>' +
+          '<div class="asset-strip">' +
+            '<span class="asset-chip">' + t.barrier_sets_available + ' barrier</span>' +
+            '<span class="asset-chip">' + t.pumps + ' pumps</span>' +
+            '<span class="asset-chip">' + t.sandbags.toLocaleString() + ' bags</span>' +
+            '<span class="asset-chip">' + t.staff_on_call + ' staff</span>' +
+          '</div>' +
+          noteHtml +
+        '</td>' +
+      '</tr>';
+    }).join("");
+  }
+
   function renderDashboard(state) {
     const timeLabel = new Date(state.fetched_at_utc).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    document.getElementById("lastUpdatedBadge").textContent = "Live data updated at " + timeLabel;
+    document.getElementById("lastUpdatedBadge").textContent = "Live feeds updated " + timeLabel;
 
-    // Render KPI Summary Cards
     const barriersTowns = state.towns.filter(function (t) { return t.recommended_level === "Barriers"; });
     const standbyTowns = state.towns.filter(function (t) { return t.recommended_level === "Standby"; });
     const activeCrews = state.crews.filter(function (c) { return c.assigned.length > 0; });
 
+    let overallStatus = "Normal";
     let overallTitle = "All 8 Towns Normal";
-    let overallSub = "No flood action required tonight";
+    let overallSub = "No flood barriers or standby needed";
     if (barriersTowns.length > 0) {
-      overallTitle = "Barrier Deployment Alert";
-      overallSub = barriersTowns.length + " town(s) require immediate barriers";
+      overallStatus = "Barriers";
+      overallTitle = "Barriers Triggered";
+      overallSub = barriersTowns.length + " town(s) above barrier threshold";
     } else if (standbyTowns.length > 0) {
+      overallStatus = "Standby";
       overallTitle = "Standby Watch Active";
-      overallSub = standbyTowns.length + " town(s) on standby monitoring";
+      overallSub = standbyTowns.length + " town(s) on elevated watch";
     }
 
     document.getElementById("summaryCards").innerHTML =
-      '<div class="kpi-card">' +
-        '<div class="kpi-label">Overall Status</div>' +
+      '<div class="kpi-card ' + overallStatus + '">' +
+        '<div class="kpi-top"><span class="kpi-label">Overall Readiness</span></div>' +
         '<div class="kpi-value">' + overallTitle + '</div>' +
         '<div class="kpi-sub">' + overallSub + '</div>' +
       '</div>' +
-      '<div class="kpi-card">' +
-        '<div class="kpi-label">Barriers Needed</div>' +
+      '<div class="kpi-card ' + (barriersTowns.length ? "Barriers" : "Normal") + '">' +
+        '<div class="kpi-top"><span class="kpi-label">Barriers Needed</span></div>' +
         '<div class="kpi-value">' + barriersTowns.length + ' Town' + (barriersTowns.length === 1 ? '' : 's') + '</div>' +
         '<div class="kpi-sub">' + (barriersTowns.length ? barriersTowns.map(function (t) { return t.town; }).join(", ") : "None above barrier level") + '</div>' +
       '</div>' +
-      '<div class="kpi-card">' +
-        '<div class="kpi-label">Standby Watch</div>' +
+      '<div class="kpi-card ' + (standbyTowns.length ? "Standby" : "Normal") + '">' +
+        '<div class="kpi-top"><span class="kpi-label">Standby Watch</span></div>' +
         '<div class="kpi-value">' + standbyTowns.length + ' Town' + (standbyTowns.length === 1 ? '' : 's') + '</div>' +
         '<div class="kpi-sub">' + (standbyTowns.length ? standbyTowns.map(function (t) { return t.town; }).join(", ") : "None on standby") + '</div>' +
       '</div>' +
       '<div class="kpi-card">' +
-        '<div class="kpi-label">Mobile Crews Assigned</div>' +
+        '<div class="kpi-top"><span class="kpi-label">Mobile Crews Active</span></div>' +
         '<div class="kpi-value">' + activeCrews.length + ' of 3 Crews</div>' +
-        '<div class="kpi-sub">' + (activeCrews.length ? activeCrews.map(function (c) { return c.name + " → " + c.assigned.join(", "); }).join("; ") : "All crews on base readiness") + '</div>' +
+        '<div class="kpi-sub">' + (activeCrews.length ? activeCrews.map(function (c) { return c.name + " → " + c.assigned.join(", "); }).join("; ") : "All 3 regional crews on base standby") + '</div>' +
       '</div>';
 
-    // Render Town Table
-    const tbody = document.getElementById("planTableBody");
-    tbody.innerHTML = state.towns.map(function (t) {
-      const maxScale = Math.max(t.p99_m3s * 1.2, (t.effective_peak_m3s || 0) * 1.1, 1);
-      const pctBar = t.effective_peak_m3s !== null ? Math.min(100, Math.max(6, Math.round((t.effective_peak_m3s / maxScale) * 100))) : 0;
+    renderTownRows(state);
 
-      const peakMeta = t.rehearsal_flow_used
-        ? '<span class="badge rehearsal">Test Override</span>'
-        : '<span style="color:var(--muted);font-size:0.78rem">Peak on ' + (t.live_peak_date || "N/A") + '</span>';
-
-      const warnText = t.effective_warning === "None"
-        ? '<span style="color:var(--muted)">No active rain warning</span>'
-        : '<strong>' + t.effective_warning + ' Rain Warning</strong>' + (t.rehearsal_warning_used ? ' <span class="badge rehearsal">Test Override</span>' : '');
-
-      const noteLine = t.notes && t.notes !== "Normal service"
-        ? '<div style="color:var(--muted);font-size:0.78rem;margin-top:3px">Note: ' + escapeHtml(t.notes) + '</div>'
-        : '';
-
-      return '<tr>' +
-        '<td><strong>' + escapeHtml(t.town) + '</strong><br><span style="color:var(--muted);font-size:0.8rem">River ' + escapeHtml(t.river) + ' (' + escapeHtml(t.counties.join(", ")) + ')</span></td>' +
-        '<td>' +
-          '<div><strong>' + (t.effective_peak_m3s !== null ? t.effective_peak_m3s + ' m³/s' : 'N/A') + '</strong> ' + peakMeta + '</div>' +
-          '<div class="flow-meter"><div class="flow-fill ' + t.recommended_level + '" style="width:' + pctBar + '%"></div></div>' +
-        '</td>' +
-        '<td style="font-size:0.82rem;color:var(--muted)">' +
-          'Standby: <strong style="color:var(--text)">' + t.p95_m3s + '</strong> m³/s<br>' +
-          'Barriers: <strong style="color:var(--text)">' + t.p99_m3s + '</strong> m³/s' +
-        '</td>' +
-        '<td style="font-size:0.84rem">' + warnText + '</td>' +
-        '<td><span class="badge ' + t.recommended_level + '">' + t.recommended_level + '</span></td>' +
-        '<td style="font-size:0.84rem">' + escapeHtml(t.operational_action) + noteLine + '</td>' +
-      '</tr>';
+    // Render Crew Readiness Strip
+    document.getElementById("crewStrip").innerHTML = state.crews.map(function (c) {
+      const statusText = c.assigned.length
+        ? '<span style="color:#dc2626;font-weight:600">Assigned: ' + escapeHtml(c.assigned.join(", ")) + '</span>'
+        : '<span style="color:#059669;font-weight:600">Ready at ' + escapeHtml(c.base) + ' base</span>';
+      return '<div class="crew-box">' +
+        '<strong>' + escapeHtml(c.name) + '</strong>' +
+        '<div style="color:var(--muted);margin:2px 0">Covers: ' + escapeHtml(c.zone.join(", ")) + '</div>' +
+        '<div>' + statusText + '</div>' +
+      '</div>';
     }).join("");
 
-    // Render Technical Audit Footer
     document.getElementById("sourceStatus").innerHTML =
-      "<strong>UTC Timestamp:</strong> " + state.fetched_at_utc + "<br>" +
-      "<strong>AI Proxy:</strong> Google Apps Script Server-Side Proxy (" + GROQ_MODEL + " on GroqCloud)<br>" +
+      "<strong>UTC Fetch Timestamp:</strong> " + state.fetched_at_utc + "<br>" +
+      "<strong>AI Backend:</strong> Google Apps Script Server-Side Proxy (" + GROQ_MODEL + " on GroqCloud)<br>" +
       "<strong>Historical Data:</strong> " + state.sources.historical_summary_file + "<br>" +
-      "<strong>Met Éireann Feed:</strong> " + state.sources.weather_warnings_api + " (" + state.national_active_warnings_count + " national warnings checked)";
+      "<strong>Met Éireann Feed:</strong> " + state.sources.weather_warnings_api + " (" + state.national_active_warnings_count + " active national warnings)";
 
     document.getElementById("auditJson").textContent = JSON.stringify(state, null, 2);
   }
@@ -1124,7 +1396,7 @@
     try {
       await computeLiveFloodPlan();
     } catch (err) {
-      document.getElementById("lastUpdatedBadge").textContent = "Error refreshing live feeds";
+      document.getElementById("lastUpdatedBadge").textContent = "Error loading live feeds";
       document.getElementById("sourceStatus").innerHTML = "<span style='color:#dc2626'>Error: " + escapeHtml(err.message) + "</span>";
     }
   }
@@ -1183,7 +1455,7 @@
     return data.reply || "No response returned.";
   }
 
-  function appendMessage(role, text) {
+  function appendMessage(role, text, isTyping) {
     const box = document.getElementById("chatBox");
     const div = document.createElement("div");
     div.className = "msg" + (role === "user" ? " user-msg" : "");
@@ -1192,21 +1464,26 @@
     roleDiv.textContent = role === "user" ? "Your Question" : "River Watch Recommendation";
     const bodyDiv = document.createElement("div");
     bodyDiv.className = "msg-body";
-    if (role === "user") {
+
+    if (isTyping) {
+      bodyDiv.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+    } else if (role === "user") {
       bodyDiv.textContent = text;
     } else {
       bodyDiv.innerHTML = formatAiReply(text);
     }
+
     div.appendChild(roleDiv);
     div.appendChild(bodyDiv);
     box.appendChild(div);
     box.scrollTop = box.scrollHeight;
+    return div;
   }
 
   function clearChat() {
     chatHistory = [];
     document.getElementById("chatBox").innerHTML =
-      '<div class="msg"><div class="msg-role">River Watch Assistant</div><div class="msg-body"><p>Conversation cleared. Click a quick question above or type a new question below.</p></div></div>';
+      '<div class="msg"><div class="msg-role">River Watch Assistant</div><div class="msg-body"><p>Conversation cleared. Click any quick question above or type a new question below.</p></div></div>';
   }
 
   async function sendQuestion() {
@@ -1218,19 +1495,22 @@
     input.value = "";
     btn.disabled = true;
     btn.textContent = "Checking...";
-    appendMessage("user", question);
+    appendMessage("user", question, false);
     chatHistory.push({ role: "user", content: question });
 
+    const typingNode = appendMessage("assistant", "", true);
     const recentMessages = chatHistory.slice(-4);
 
     try {
       const freshState = await computeLiveFloodPlan();
       const systemPrompt = buildCompactPrompt(freshState);
       const reply = await callServerProxy(systemPrompt, recentMessages);
+      typingNode.remove();
       chatHistory.push({ role: "assistant", content: reply });
-      appendMessage("assistant", reply);
+      appendMessage("assistant", reply, false);
     } catch (err) {
-      appendMessage("assistant", "Error: " + err.message);
+      typingNode.remove();
+      appendMessage("assistant", "Error: " + err.message, false);
     } finally {
       btn.disabled = false;
       btn.textContent = "Ask";
@@ -1247,6 +1527,14 @@
     btn.addEventListener("click", function () {
       document.getElementById("questionInput").value = btn.getAttribute("data-q");
       sendQuestion();
+    });
+  });
+  document.querySelectorAll(".filter-tab").forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      document.querySelectorAll(".filter-tab").forEach(function (t) { t.classList.remove("active"); });
+      tab.classList.add("active");
+      currentFilter = tab.getAttribute("data-filter");
+      if (latestState) renderTownRows(latestState);
     });
   });
 
