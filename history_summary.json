@@ -1,0 +1,603 @@
+{
+  "generated_at_utc": "2026-11-24T09:34:35.529Z",
+  "source": "Open-Meteo Flood API (GloFAS v4) — https://flood-api.open-meteo.com/v1/flood",
+  "licence": "CC-BY 4.0 (Copernicus EMS / Open-Meteo)",
+  "period": "2016-01-01 to 2025-12-31",
+  "winter_definition": "1 October to 31 March, 2016/17 to 2024/25 (9 winters)",
+  "towns": [
+    {
+      "town": "Clonmel",
+      "counties": [
+        "Tipperary"
+      ],
+      "river": "Suir",
+      "town_center_coords": {
+        "lat": 52.3525,
+        "lon": -7.7036
+      },
+      "verified_channel_coords": {
+        "lat": 52.375,
+        "lon": -7.675
+      },
+      "period": "2016-01-01 to 2025-12-31",
+      "valid_days": 3653,
+      "median_m3s": 25.3,
+      "p95_m3s": 77.7,
+      "p99_m3s": 127.66,
+      "winter_study_2016_2025": {
+        "winters": [
+          {
+            "winter": "2016/17",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2017/18",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2018/19",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2019/20",
+            "events": 2,
+            "eventDays": 4
+          },
+          {
+            "winter": "2020/21",
+            "events": 3,
+            "eventDays": 6
+          },
+          {
+            "winter": "2021/22",
+            "events": 2,
+            "eventDays": 2
+          },
+          {
+            "winter": "2022/23",
+            "events": 1,
+            "eventDays": 3
+          },
+          {
+            "winter": "2023/24",
+            "events": 2,
+            "eventDays": 3
+          },
+          {
+            "winter": "2024/25",
+            "events": 1,
+            "eventDays": 2
+          }
+        ],
+        "totalEvents": 11,
+        "first4Events": 2,
+        "middleWinter2020_21": 3,
+        "last4Events": 6,
+        "last4HigherThanFirst4": true
+      }
+    },
+    {
+      "town": "Fermoy",
+      "counties": [
+        "Cork"
+      ],
+      "river": "Blackwater",
+      "town_center_coords": {
+        "lat": 52.1386,
+        "lon": -8.2758
+      },
+      "verified_channel_coords": {
+        "lat": 52.125,
+        "lon": -8.225
+      },
+      "period": "2016-01-01 to 2025-12-31",
+      "valid_days": 3653,
+      "median_m3s": 24.41,
+      "p95_m3s": 77.23,
+      "p99_m3s": 127.82,
+      "winter_study_2016_2025": {
+        "winters": [
+          {
+            "winter": "2016/17",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2017/18",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2018/19",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2019/20",
+            "events": 1,
+            "eventDays": 2
+          },
+          {
+            "winter": "2020/21",
+            "events": 3,
+            "eventDays": 9
+          },
+          {
+            "winter": "2021/22",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2022/23",
+            "events": 1,
+            "eventDays": 2
+          },
+          {
+            "winter": "2023/24",
+            "events": 2,
+            "eventDays": 5
+          },
+          {
+            "winter": "2024/25",
+            "events": 3,
+            "eventDays": 6
+          }
+        ],
+        "totalEvents": 10,
+        "first4Events": 1,
+        "middleWinter2020_21": 3,
+        "last4Events": 6,
+        "last4HigherThanFirst4": true
+      }
+    },
+    {
+      "town": "Mallow",
+      "counties": [
+        "Cork"
+      ],
+      "river": "Blackwater",
+      "town_center_coords": {
+        "lat": 52.1342,
+        "lon": -8.6431
+      },
+      "verified_channel_coords": {
+        "lat": 52.125,
+        "lon": -8.575
+      },
+      "period": "2016-01-01 to 2025-12-31",
+      "valid_days": 3653,
+      "median_m3s": 14.49,
+      "p95_m3s": 46.21,
+      "p99_m3s": 73.47,
+      "winter_study_2016_2025": {
+        "winters": [
+          {
+            "winter": "2016/17",
+            "events": 1,
+            "eventDays": 1
+          },
+          {
+            "winter": "2017/18",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2018/19",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2019/20",
+            "events": 1,
+            "eventDays": 2
+          },
+          {
+            "winter": "2020/21",
+            "events": 3,
+            "eventDays": 6
+          },
+          {
+            "winter": "2021/22",
+            "events": 1,
+            "eventDays": 1
+          },
+          {
+            "winter": "2022/23",
+            "events": 1,
+            "eventDays": 2
+          },
+          {
+            "winter": "2023/24",
+            "events": 2,
+            "eventDays": 4
+          },
+          {
+            "winter": "2024/25",
+            "events": 3,
+            "eventDays": 6
+          }
+        ],
+        "totalEvents": 12,
+        "first4Events": 2,
+        "middleWinter2020_21": 3,
+        "last4Events": 7,
+        "last4HigherThanFirst4": true
+      }
+    },
+    {
+      "town": "Bandon",
+      "counties": [
+        "Cork"
+      ],
+      "river": "Bandon",
+      "town_center_coords": {
+        "lat": 51.7458,
+        "lon": -8.7364
+      },
+      "verified_channel_coords": {
+        "lat": 51.725,
+        "lon": -8.675
+      },
+      "period": "2016-01-01 to 2025-12-31",
+      "valid_days": 3653,
+      "median_m3s": 5.84,
+      "p95_m3s": 23.91,
+      "p99_m3s": 41.46,
+      "winter_study_2016_2025": {
+        "winters": [
+          {
+            "winter": "2016/17",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2017/18",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2018/19",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2019/20",
+            "events": 1,
+            "eventDays": 1
+          },
+          {
+            "winter": "2020/21",
+            "events": 2,
+            "eventDays": 5
+          },
+          {
+            "winter": "2021/22",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2022/23",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2023/24",
+            "events": 3,
+            "eventDays": 5
+          },
+          {
+            "winter": "2024/25",
+            "events": 5,
+            "eventDays": 9
+          }
+        ],
+        "totalEvents": 11,
+        "first4Events": 1,
+        "middleWinter2020_21": 2,
+        "last4Events": 8,
+        "last4HigherThanFirst4": true
+      }
+    },
+    {
+      "town": "Enniscorthy",
+      "counties": [
+        "Wexford"
+      ],
+      "river": "Slaney",
+      "town_center_coords": {
+        "lat": 52.5011,
+        "lon": -6.5653
+      },
+      "verified_channel_coords": {
+        "lat": 52.475,
+        "lon": -6.625
+      },
+      "period": "2016-01-01 to 2025-12-31",
+      "valid_days": 3653,
+      "median_m3s": 13.35,
+      "p95_m3s": 38.72,
+      "p99_m3s": 69.79,
+      "winter_study_2016_2025": {
+        "winters": [
+          {
+            "winter": "2016/17",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2017/18",
+            "events": 1,
+            "eventDays": 2
+          },
+          {
+            "winter": "2018/19",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2019/20",
+            "events": 1,
+            "eventDays": 2
+          },
+          {
+            "winter": "2020/21",
+            "events": 1,
+            "eventDays": 8
+          },
+          {
+            "winter": "2021/22",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2022/23",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2023/24",
+            "events": 2,
+            "eventDays": 4
+          },
+          {
+            "winter": "2024/25",
+            "events": 2,
+            "eventDays": 3
+          }
+        ],
+        "totalEvents": 7,
+        "first4Events": 2,
+        "middleWinter2020_21": 1,
+        "last4Events": 4,
+        "last4HigherThanFirst4": true
+      }
+    },
+    {
+      "town": "Ennis",
+      "counties": [
+        "Clare"
+      ],
+      "river": "Fergus",
+      "town_center_coords": {
+        "lat": 52.8436,
+        "lon": -8.9831
+      },
+      "verified_channel_coords": {
+        "lat": 52.775,
+        "lon": -8.975
+      },
+      "period": "2016-01-01 to 2025-12-31",
+      "valid_days": 3653,
+      "median_m3s": 13.35,
+      "p95_m3s": 38.26,
+      "p99_m3s": 53.56,
+      "winter_study_2016_2025": {
+        "winters": [
+          {
+            "winter": "2016/17",
+            "events": 1,
+            "eventDays": 1
+          },
+          {
+            "winter": "2017/18",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2018/19",
+            "events": 1,
+            "eventDays": 2
+          },
+          {
+            "winter": "2019/20",
+            "events": 5,
+            "eventDays": 15
+          },
+          {
+            "winter": "2020/21",
+            "events": 2,
+            "eventDays": 2
+          },
+          {
+            "winter": "2021/22",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2022/23",
+            "events": 3,
+            "eventDays": 7
+          },
+          {
+            "winter": "2023/24",
+            "events": 5,
+            "eventDays": 7
+          },
+          {
+            "winter": "2024/25",
+            "events": 1,
+            "eventDays": 2
+          }
+        ],
+        "totalEvents": 18,
+        "first4Events": 7,
+        "middleWinter2020_21": 2,
+        "last4Events": 9,
+        "last4HigherThanFirst4": true
+      }
+    },
+    {
+      "town": "Athlone",
+      "counties": [
+        "Westmeath",
+        "Roscommon"
+      ],
+      "river": "Shannon",
+      "town_center_coords": {
+        "lat": 53.4239,
+        "lon": -7.9407
+      },
+      "verified_channel_coords": {
+        "lat": 53.375,
+        "lon": -7.975
+      },
+      "period": "2016-01-01 to 2025-12-31",
+      "valid_days": 3653,
+      "median_m3s": 68.5,
+      "p95_m3s": 145.35,
+      "p99_m3s": 190.43,
+      "winter_study_2016_2025": {
+        "winters": [
+          {
+            "winter": "2016/17",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2017/18",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2018/19",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2019/20",
+            "events": 2,
+            "eventDays": 4
+          },
+          {
+            "winter": "2020/21",
+            "events": 1,
+            "eventDays": 1
+          },
+          {
+            "winter": "2021/22",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2022/23",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2023/24",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2024/25",
+            "events": 0,
+            "eventDays": 0
+          }
+        ],
+        "totalEvents": 3,
+        "first4Events": 2,
+        "middleWinter2020_21": 1,
+        "last4Events": 0,
+        "last4HigherThanFirst4": false
+      }
+    },
+    {
+      "town": "Carrick-on-Shannon",
+      "counties": [
+        "Leitrim",
+        "Roscommon"
+      ],
+      "river": "Shannon",
+      "town_center_coords": {
+        "lat": 53.9469,
+        "lon": -8.0908
+      },
+      "verified_channel_coords": {
+        "lat": 53.875,
+        "lon": -8.025
+      },
+      "period": "2016-01-01 to 2025-12-31",
+      "valid_days": 3653,
+      "median_m3s": 27.91,
+      "p95_m3s": 79.72,
+      "p99_m3s": 114.88,
+      "winter_study_2016_2025": {
+        "winters": [
+          {
+            "winter": "2016/17",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2017/18",
+            "events": 1,
+            "eventDays": 2
+          },
+          {
+            "winter": "2018/19",
+            "events": 1,
+            "eventDays": 3
+          },
+          {
+            "winter": "2019/20",
+            "events": 2,
+            "eventDays": 9
+          },
+          {
+            "winter": "2020/21",
+            "events": 5,
+            "eventDays": 10
+          },
+          {
+            "winter": "2021/22",
+            "events": 1,
+            "eventDays": 1
+          },
+          {
+            "winter": "2022/23",
+            "events": 1,
+            "eventDays": 3
+          },
+          {
+            "winter": "2023/24",
+            "events": 0,
+            "eventDays": 0
+          },
+          {
+            "winter": "2024/25",
+            "events": 1,
+            "eventDays": 2
+          }
+        ],
+        "totalEvents": 12,
+        "first4Events": 4,
+        "middleWinter2020_21": 5,
+        "last4Events": 3,
+        "last4HigherThanFirst4": false
+      }
+    }
+  ]
+}
