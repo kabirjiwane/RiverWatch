@@ -6,20 +6,14 @@
   <title>River Watch — Task 1 Data Verification & History Builder</title>
   <style>
     :root {
-      --bg: #0f172a;
-      --card: #1e293b;
-      --border: #334155;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --accent: #38bdf8;
-      --ok: #22c55e;
-      --warn: #f59e0b;
-      --err: #ef4444;
+      --bg: #0f172a; --card: #1e293b; --border: #334155;
+      --text: #f8fafc; --muted: #94a3b8; --accent: #38bdf8;
+      --ok: #22c55e; --warn: #f59e0b; --err: #ef4444;
     }
     * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
     body { background: var(--bg); color: var(--text); margin: 0; padding: 24px; line-height: 1.5; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    h1 { margin: 0 0 6px; font-size: 1.6rem; color: var(--accent); }
+    .container { max-width: 1240px; margin: 0 auto; }
+    h1 { margin: 0 0 6px; font-size: 1.55rem; color: var(--accent); }
     p.sub { margin: 0 0 20px; color: var(--muted); font-size: 0.95rem; }
     .controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
     button {
@@ -37,7 +31,7 @@
       padding: 16px; margin-bottom: 24px; overflow-x: auto;
     }
     h2 { margin: 0 0 12px; font-size: 1.15rem; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
     th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--border); }
     th { color: var(--accent); font-weight: 600; white-space: nowrap; }
     tr:hover { background: rgba(56, 189, 248, 0.06); }
@@ -45,7 +39,6 @@
       display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
     }
     .badge.ok { background: rgba(34, 197, 94, 0.18); color: var(--ok); }
-    .badge.warn { background: rgba(245, 158, 11, 0.18); color: var(--warn); }
     .badge.err { background: rgba(239, 68, 68, 0.18); color: var(--err); }
     pre {
       background: #020617; border: 1px solid var(--border); padding: 12px;
@@ -55,31 +48,31 @@
 </head>
 <body>
 <div class="container">
-  <h1>River Watch — Task 1: Data Verification &amp; Historical Summary Builder</h1>
-  <p class="sub">Fetches 10-year daily river discharge (2016-01-01 to 2025-12-31) &amp; 3-day forecasts via Open-Meteo GloFAS v4, verifies Met Éireann county labels, and exports <code>history_summary.json</code>.</p>
+  <h1>River Watch — Task 1: River Channel Verification &amp; Historical Summary</h1>
+  <p class="sub">Verifies the main GloFAS v4 river channel cell (±0.05°) for each town, computes 2016–2025 percentiles &amp; winter flood runs, and exports <code>history_summary.json</code>.</p>
 
   <div class="controls">
-    <button id="runBtn" onclick="runAllChecks()">1. Fetch &amp; Verify All Sources</button>
+    <button id="runBtn" onclick="runAllChecks()">1. Verify River Channels &amp; Fetch All Sources</button>
     <button id="downloadJsonBtn" class="secondary" onclick="downloadHistoryJson()" disabled>2. Download history_summary.json</button>
-    <button id="downloadCsvBtn" class="secondary" onclick="downloadClonmelCsv()" disabled>3. Download Clonmel 10-Yr CSV (for Task 3 Check)</button>
+    <button id="downloadCsvBtn" class="secondary" onclick="downloadClonmelCsv()" disabled>3. Download Clonmel 10-Yr CSV (Task 3 Check)</button>
   </div>
 
-  <div class="status" id="statusBox">Ready. Click <strong>Fetch &amp; Verify All Sources</strong> to query Open-Meteo Flood API and Met Éireann.</div>
+  <div class="status" id="statusBox">Ready. Click <strong>1. Verify River Channels &amp; Fetch All Sources</strong>.</div>
 
   <div class="card">
-    <h2>1. River Coordinates, Percentiles (2016–2025), Live Forecast &amp; Winter Flood Events</h2>
+    <h2>1. Verified River Channel Coordinates, Percentiles (2016–2025), Live Forecast &amp; Winter Events</h2>
     <table>
       <thead>
         <tr>
           <th>Town</th>
           <th>County(s)</th>
           <th>River</th>
-          <th>Input Lat, Lon</th>
-          <th>GloFAS Grid</th>
+          <th>Town Center</th>
+          <th>Verified Channel Cell</th>
           <th>Median (m³/s)</th>
-          <th>95th Pct (m³/s)</th>
-          <th>99th Pct (m³/s)</th>
-          <th>3-Day Peak (m³/s)</th>
+          <th>95th Pct</th>
+          <th>99th Pct</th>
+          <th>3-Day Peak</th>
           <th>Winters 16/17–24/25 Events</th>
           <th>First 4 vs Last 4 Winters</th>
         </tr>
@@ -97,13 +90,12 @@
   </div>
 
   <div class="card">
-    <h2>3. Generated <code>history_summary.json</code> (Pre-Computed Static File for Task 2)</h2>
+    <h2>3. Generated <code>history_summary.json</code> (Upload to GitHub Repo for Task 2)</h2>
     <pre id="jsonPreview">Run verification to generate summary JSON.</pre>
   </div>
 </div>
 
 <script>
-  // Verified river channel coordinates for all 8 Irish towns
   const TOWNS = [
     { town: "Clonmel", counties: ["Tipperary"], river: "Suir", lat: 52.3525, lon: -7.7036 },
     { town: "Fermoy", counties: ["Cork"], river: "Blackwater", lat: 52.1386, lon: -8.2758 },
@@ -115,69 +107,74 @@
     { town: "Carrick-on-Shannon", counties: ["Leitrim", "Roscommon"], river: "Shannon", lat: 53.9469, lon: -8.0908 }
   ];
 
-  // ISO-3166-2:IE / Met Éireann county code lookup map
-  const COUNTY_CODES = {
-    "EI01": "Carlow", "EI02": "Cavan", "EI03": "Clare", "EI04": "Cork",
-    "EI06": "Donegal", "EI07": "Dublin", "EI10": "Galway", "EI11": "Kerry",
-    "EI12": "Kildare", "EI13": "Kilkenny", "EI14": "Leitrim", "EI15": "Laois",
-    "EI16": "Limerick", "EI18": "Longford", "EI19": "Louth", "EI20": "Mayo",
-    "EI21": "Meath", "EI22": "Monaghan", "EI23": "Offaly", "EI24": "Roscommon",
-    "EI25": "Sligo", "EI26": "Tipperary", "EI27": "Waterford", "EI29": "Westmeath",
-    "EI30": "Wexford", "EI31": "Wicklow"
-  };
-
   let computedHistorySummary = null;
   let clonmelDailySeries = [];
-
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
   function getPercentile(sortedArr, p) {
     if (!sortedArr.length) return null;
     const idx = (p / 100) * (sortedArr.length - 1);
-    const lo = Math.floor(idx);
-    const hi = Math.ceil(idx);
-    if (lo === hi) return sortedArr[lo];
-    return sortedArr[lo] + (sortedArr[hi] - sortedArr[lo]) * (idx - lo);
+    const lo = Math.floor(idx), hi = Math.ceil(idx);
+    return lo === hi ? sortedArr[lo] : sortedArr[lo] + (sortedArr[hi] - sortedArr[lo]) * (idx - lo);
   }
 
-  // Count consecutive runs >= p99 per winter (1 Oct to 31 Mar) from 2016/17 to 2024/25
+  // Find the main river channel grid cell within ±0.05° (~5 km) of the town center
+  async function findMainChannelCell(t) {
+    const offsets = [-0.05, 0, 0.05];
+    const lats = [], lons = [];
+    for (const dLat of offsets) {
+      for (const dLon of offsets) {
+        lats.push((t.lat + dLat).toFixed(4));
+        lons.push((t.lon + dLon).toFixed(4));
+      }
+    }
+    const probeUrl = `https://flood-api.open-meteo.com/v1/flood?latitude=${lats.join(",")}&longitude=${lons.join(",")}&daily=river_discharge&start_date=2024-01-01&end_date=2024-12-31`;
+    const res = await fetch(probeUrl);
+    if (!res.ok) throw new Error(`Grid probe HTTP ${res.status} for ${t.town}`);
+    const raw = await res.json();
+    const cells = Array.isArray(raw) ? raw : [raw];
+
+    let bestCell = null;
+    let bestMedian = -1;
+
+    for (const cell of cells) {
+      const vals = (cell.daily?.river_discharge || []).filter(v => v !== null && !isNaN(v)).sort((a, b) => a - b);
+      const med = getPercentile(vals, 50) ?? -1;
+      if (med > bestMedian) {
+        bestMedian = med;
+        bestCell = cell;
+      }
+    }
+    return {
+      lat: Number(bestCell.latitude.toFixed(4)),
+      lon: Number(bestCell.longitude.toFixed(4))
+    };
+  }
+
   function analyzeWinterEvents(dates, discharges, p99) {
     const winters = [];
     for (let startYear = 2016; startYear <= 2024; startYear++) {
       const startStr = `${startYear}-10-01`;
       const endStr = `${startYear + 1}-03-31`;
-      let events = 0;
-      let eventDays = 0;
-      let inRun = false;
+      let events = 0, eventDays = 0, inRun = false;
 
       for (let i = 0; i < dates.length; i++) {
         const d = dates[i];
-        if (d < startStr || d > endStr) {
-          inRun = false;
-          continue;
-        }
+        if (d < startStr || d > endStr) { inRun = false; continue; }
         const val = discharges[i];
         if (val !== null && val >= p99) {
           eventDays++;
-          if (!inRun) {
-            events++;
-            inRun = true;
-          }
+          if (!inRun) { events++; inRun = true; }
         } else {
           inRun = false;
         }
       }
-      winters.push({
-        winter: `${startYear}/${String(startYear + 1).slice(2)}`,
-        events,
-        eventDays
-      });
+      winters.push({ winter: `${startYear}/${String(startYear + 1).slice(2)}`, events, eventDays });
     }
 
-    const totalEvents = winters.reduce((acc, w) => acc + w.events, 0);
-    // First 4 winters: 2016/17..2019/20 | Middle: 2020/21 | Last 4 winters: 2021/22..2024/25
-    const first4Events = winters.slice(0, 4).reduce((acc, w) => acc + w.events, 0);
-    const last4Events = winters.slice(5, 9).reduce((acc, w) => acc + w.events, 0);
+    const totalEvents = winters.reduce((a, w) => a + w.events, 0);
+    const first4Events = winters.slice(0, 4).reduce((a, w) => a + w.events, 0);
+    const last4Events = winters.slice(5, 9).reduce((a, w) => a + w.events, 0);
 
     return {
       winters,
@@ -190,14 +187,15 @@
   }
 
   async function fetchTownFloodData(t) {
-    // 1. Fetch 10 full years of daily river discharge (2016-01-01 to 2025-12-31)
-    const histUrl = `https://flood-api.open-meteo.com/v1/flood?latitude=${t.lat}&longitude=${t.lon}&daily=river_discharge&start_date=2016-01-01&end_date=2025-12-31`;
+    const channel = await findMainChannelCell(t);
+    await sleep(150);
+
+    const histUrl = `https://flood-api.open-meteo.com/v1/flood?latitude=${channel.lat}&longitude=${channel.lon}&daily=river_discharge&start_date=2016-01-01&end_date=2025-12-31`;
     const histRes = await fetch(histUrl);
     if (!histRes.ok) throw new Error(`History HTTP ${histRes.status} for ${t.town}`);
     const histData = await histRes.json();
 
-    // 2. Fetch live forecast for today + next 2 days (forecast_days=3)
-    const fcUrl = `https://flood-api.open-meteo.com/v1/flood?latitude=${t.lat}&longitude=${t.lon}&daily=river_discharge&forecast_days=3`;
+    const fcUrl = `https://flood-api.open-meteo.com/v1/flood?latitude=${channel.lat}&longitude=${channel.lon}&daily=river_discharge&forecast_days=3`;
     const fcRes = await fetch(fcUrl);
     if (!fcRes.ok) throw new Error(`Forecast HTTP ${fcRes.status} for ${t.town}`);
     const fcData = await fcRes.json();
@@ -212,7 +210,6 @@
 
     const fcVals = fcData.daily.river_discharge.filter(v => v !== null && !isNaN(v));
     const peak3Day = fcVals.length ? Number(Math.max(...fcVals).toFixed(2)) : null;
-
     const winterStats = analyzeWinterEvents(dates, rawVals, p99);
 
     if (t.town === "Clonmel") {
@@ -223,8 +220,8 @@
       town: t.town,
       counties: t.counties,
       river: t.river,
-      input_coords: { lat: t.lat, lon: t.lon },
-      glofas_grid_coords: { lat: histData.latitude, lon: histData.longitude },
+      town_center_coords: { lat: t.lat, lon: t.lon },
+      verified_channel_coords: channel,
       period: "2016-01-01 to 2025-12-31",
       valid_days: validSorted.length,
       median_m3s: p50,
@@ -238,22 +235,16 @@
 
   async function fetchMetEireannWarnings() {
     const targetUrl = "https://www.met.ie/Open_Data/json/warning_IRELAND.json";
-    let data = null;
-    let routeUsed = "Direct fetch";
-
     try {
       const res = await fetch(targetUrl);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      data = await res.json();
-    } catch (directErr) {
-      // Fallback via AllOrigins public CORS proxy if browser blocks direct met.ie CORS
-      routeUsed = "CORS proxy fallback (api.allorigins.win)";
+      return { routeUsed: "Direct fetch", data: await res.json() };
+    } catch {
       const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
       const proxyRes = await fetch(proxyUrl);
       if (!proxyRes.ok) throw new Error(`Proxy HTTP ${proxyRes.status}`);
-      data = await proxyRes.json();
+      return { routeUsed: "CORS proxy fallback (api.allorigins.win)", data: await proxyRes.json() };
     }
-    return { routeUsed, data };
   }
 
   async function runAllChecks() {
@@ -267,7 +258,7 @@
     try {
       for (let i = 0; i < TOWNS.length; i++) {
         const t = TOWNS[i];
-        status.innerHTML = `Fetching Open-Meteo GloFAS data (${i + 1}/${TOWNS.length}): <strong>${t.town}</strong> (${t.river})...`;
+        status.innerHTML = `Probing river channel &amp; fetching 10-year data (${i + 1}/${TOWNS.length}): <strong>${t.town}</strong> (${t.river})...`;
         const row = await fetchTownFloodData(t);
         results.push(row);
 
@@ -277,9 +268,9 @@
           <td><strong>${row.town}</strong></td>
           <td>${row.counties.join(", ")}</td>
           <td>${row.river}</td>
-          <td>${row.input_coords.lat}, ${row.input_coords.lon}</td>
-          <td>${row.glofas_grid_coords.lat.toFixed(3)}, ${row.glofas_grid_coords.lon.toFixed(3)}</td>
-          <td>${row.median_m3s}</td>
+          <td>${row.town_center_coords.lat}, ${row.town_center_coords.lon}</td>
+          <td><strong>${row.verified_channel_coords.lat}, ${row.verified_channel_coords.lon}</strong></td>
+          <td><strong>${row.median_m3s}</strong></td>
           <td>${row.p95_m3s}</td>
           <td><strong>${row.p99_m3s}</strong></td>
           <td>${row.live_3day_peak_m3s}</td>
@@ -287,7 +278,7 @@
           <td>First 4: <strong>${ws.first4Events}</strong> | Last 4: <strong>${ws.last4Events}</strong> (${ws.last4HigherThanFirst4 ? "Higher" : "Not higher"})</td>
         `;
         tbody.appendChild(tr);
-        await sleep(180); // Avoid Open-Meteo free-tier rate limits
+        await sleep(200);
       }
 
       status.innerHTML = "Fetching live Met Éireann weather warnings feed...";
@@ -295,11 +286,9 @@
       const warningsList = Array.isArray(met.data) ? met.data : (met.data.warnings || []);
 
       document.getElementById("warningsSummary").innerHTML =
-        `<span class="badge ok">Loaded via ${met.routeUsed}</span> &nbsp; Active national warnings count: <strong>${warningsList.length}</strong>. ` +
-        `Inspect raw <code>regions</code> values below to verify whether Met Éireann returns county names (e.g. <code>"Cork"</code>) or ISO codes (e.g. <code>"EI04"</code>).`;
+        `<span class="badge ok">Loaded via ${met.routeUsed}</span> &nbsp; Active national warnings: <strong>${warningsList.length}</strong>.`;
       document.getElementById("warningsRaw").textContent = JSON.stringify(met.data, null, 2);
 
-      // Build clean static summary JSON (without live forecast values) for Task 2
       computedHistorySummary = {
         generated_at_utc: new Date().toISOString(),
         source: "Open-Meteo Flood API (GloFAS v4) — https://flood-api.open-meteo.com/v1/flood",
@@ -312,7 +301,7 @@
       document.getElementById("jsonPreview").textContent = JSON.stringify(computedHistorySummary, null, 2);
       document.getElementById("downloadJsonBtn").disabled = false;
       document.getElementById("downloadCsvBtn").disabled = false;
-      status.innerHTML = `<span class="badge ok">Complete</span> All 8 rivers and Met Éireann warnings verified. Download <code>history_summary.json</code> for Task 2.`;
+      status.innerHTML = `<span class="badge ok">Complete</span> All 8 river channels verified! Download <code>history_summary.json</code> and upload it to your GitHub repo.`;
     } catch (err) {
       status.innerHTML = `<span class="badge err">Error</span> ${err.message}`;
     } finally {
