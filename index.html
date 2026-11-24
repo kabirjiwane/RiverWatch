@@ -3,147 +3,607 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>River Watch — Flood Response Decision-Support Tool</title>
+  <title>River Watch — Irish Flood Response Decision Support</title>
   <style>
     :root {
-      --bg: #0b1120; --card: #1e293b; --border: #334155;
-      --text: #f8fafc; --muted: #94a3b8; --accent: #38bdf8;
-      --normal: #22c55e; --standby: #f59e0b; --barriers: #ef4444;
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #0369a1;
+      --primary-hover: #075985;
+      --normal-bg: #dcfce7;
+      --normal-text: #166534;
+      --normal-bar: #16a34a;
+      --standby-bg: #fef3c7;
+      --standby-text: #92400e;
+      --standby-bar: #d97706;
+      --barriers-bg: #fee2e2;
+      --barriers-text: #991b1b;
+      --barriers-bar: #dc2626;
+      --rehearsal-bg: #f3e8ff;
+      --rehearsal-text: #6b21a8;
     }
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
-    body { background: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.5; }
-    .container { max-width: 1280px; margin: 0 auto; }
-    header {
-      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
-      gap: 12px; border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 18px;
+
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
-    header h1 { margin: 0; font-size: 1.5rem; color: var(--accent); }
-    header p { margin: 2px 0 0; color: var(--muted); font-size: 0.9rem; }
-    .disclaimer {
-      background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.45);
-      color: #fde68a; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; margin-bottom: 18px;
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px 16px 40px;
+      line-height: 1.5;
     }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .topbar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 22px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.45rem;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #16a34a;
+    }
+
+    /* Notice Banner */
+    .notice {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-left: 4px solid #d97706;
+      color: #78350f;
+      padding: 11px 16px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      margin-bottom: 18px;
+    }
+
+    /* Summary KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 15px 18px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    }
+
+    .kpi-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .kpi-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .kpi-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Main Sections */
     .card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-      padding: 16px; margin-bottom: 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
     }
-    .card h2 { margin: 0 0 10px; font-size: 1.08rem; color: var(--accent); }
-    input {
-      width: 100%; background: #0f172a; color: var(--text); border: 1px solid var(--border);
-      border-radius: 6px; padding: 10px 12px; font-size: 0.92rem;
+
+    .card-header {
+      margin-bottom: 14px;
     }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.12rem;
+      color: var(--text);
+    }
+
+    .card-header p {
+      margin: 3px 0 0;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    /* Buttons & Inputs */
     button {
-      background: var(--accent); color: #0f172a; border: none; padding: 9px 14px;
-      border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.88rem;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.15s ease;
     }
-    button:disabled { opacity: 0.45; cursor: not-allowed; }
-    button.secondary { background: #0f172a; color: var(--text); border: 1px solid var(--border); }
-    .pill {
-      display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 0.76rem; font-weight: 700;
+
+    button:hover:not(:disabled) {
+      background: var(--primary-hover);
     }
-    .pill.Normal { background: rgba(34, 197, 94, 0.18); color: var(--normal); }
-    .pill.Standby { background: rgba(245, 158, 11, 0.2); color: var(--standby); }
-    .pill.Barriers { background: rgba(239, 68, 68, 0.22); color: var(--barriers); }
-    .pill.rehearsal { background: rgba(168, 85, 247, 0.22); color: #d8b4fe; margin-left: 4px; }
-    .presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    button.secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    button.secondary:hover:not(:disabled) {
+      background: var(--surface-soft);
+    }
+
+    /* Preset Chips */
+    .preset-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
     .presets button {
-      background: #0f172a; color: #e2e8f0; border: 1px solid var(--border); font-weight: 500; font-size: 0.82rem;
+      background: var(--surface-soft);
+      color: var(--text);
+      border: 1px solid var(--border);
+      font-weight: 500;
+      font-size: 0.84rem;
+      padding: 7px 13px;
+      border-radius: 999px;
     }
-    .presets button:hover { border-color: var(--accent); color: var(--accent); }
+
+    .presets button:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #f0f9ff;
+    }
+
+    /* Chat Area */
     .chat-box {
-      background: #020617; border: 1px solid var(--border); border-radius: 8px;
-      padding: 14px; min-height: 180px; max-height: 460px; overflow-y: auto; margin-bottom: 12px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      min-height: 150px;
+      max-height: 480px;
+      overflow-y: auto;
+      margin-bottom: 12px;
     }
-    .msg { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #1e293b; }
-    .msg:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .msg-role { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
-    .msg-role.user { color: #a7f3d0; }
-    .msg-body { white-space: pre-wrap; font-size: 0.92rem; line-height: 1.55; }
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
-    th, td { padding: 8px 9px; text-align: left; border-bottom: 1px solid var(--border); }
-    th { color: var(--accent); white-space: nowrap; }
-    details { margin-top: 10px; font-size: 0.84rem; color: var(--muted); }
-    pre.audit {
-      background: #020617; border: 1px solid var(--border); padding: 10px;
-      border-radius: 6px; overflow-x: auto; max-height: 260px; color: #cbd5e1;
+
+    .msg {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 15px;
+      margin-bottom: 12px;
+    }
+
+    .msg:last-child {
+      margin-bottom: 0;
+    }
+
+    .msg.user-msg {
+      background: #f0f9ff;
+      border-color: #bae6fd;
+    }
+
+    .msg-role {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .msg.user-msg .msg-role {
+      color: #0369a1;
+    }
+
+    .msg-body {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .msg-body p {
+      margin: 0 0 8px;
+    }
+
+    .msg-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .msg-body h4 {
+      margin: 10px 0 6px;
+      font-size: 0.96rem;
+      color: var(--text);
+    }
+
+    .msg-body ul {
+      margin: 4px 0 8px;
+      padding-left: 20px;
+    }
+
+    .msg-body li {
+      margin-bottom: 4px;
+    }
+
+    .msg-body hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 10px 0;
+    }
+
+    .ai-table-wrap {
+      overflow-x: auto;
+      margin: 8px 0;
+    }
+
+    .ai-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+      background: var(--surface);
+    }
+
+    .ai-table th,
+    .ai-table td {
+      border: 1px solid var(--border);
+      padding: 6px 9px;
+      text-align: left;
+    }
+
+    .ai-table th {
+      background: var(--surface-soft);
+      font-weight: 600;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.92rem;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(3, 105, 161, 0.12);
+    }
+
+    /* Town Table */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table.town-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.87rem;
+    }
+
+    table.town-table th {
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    table.town-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    table.town-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.town-table tr:hover td {
+      background: #f8fafc;
+    }
+
+    /* Status Badges */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .badge.Normal {
+      background: var(--normal-bg);
+      color: var(--normal-text);
+    }
+
+    .badge.Standby {
+      background: var(--standby-bg);
+      color: var(--standby-text);
+    }
+
+    .badge.Barriers {
+      background: var(--barriers-bg);
+      color: var(--barriers-text);
+    }
+
+    .badge.rehearsal {
+      background: var(--rehearsal-bg);
+      color: var(--rehearsal-text);
+      font-size: 0.72rem;
+      margin-left: 4px;
+    }
+
+    /* Visual Flow Bar */
+    .flow-meter {
+      width: 130px;
+      height: 7px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .flow-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+
+    .flow-fill.Normal { background: var(--normal-bar); }
+    .flow-fill.Standby { background: var(--standby-bar); }
+    .flow-fill.Barriers { background: var(--barriers-bar); }
+
+    /* Legend & Footer Audit */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    details.audit-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    details.audit-panel summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    pre.audit-json {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      max-height: 260px;
+      font-size: 0.8rem;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
 <div class="container">
-  <header>
-    <div>
-      <h1>River Watch — Flood Response Decision Support</h1>
-      <p>Eight-Town Irish Flood Response Team · Flood Plan v2026/27 · Live Data &amp; Audit Trail</p>
+
+  <!-- Top Header -->
+  <header class="topbar">
+    <div class="brand">
+      <h1>River Watch</h1>
+      <p>Flood Response Decision-Support Dashboard · 8-Town Irish Council Team</p>
     </div>
-    <div>
-      <button type="button" id="refreshBtn" class="secondary">Refresh Live Sources</button>
+    <div class="topbar-actions">
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        <span id="lastUpdatedBadge">Checking live feeds...</span>
+      </div>
+      <button type="button" id="refreshBtn" class="secondary">Refresh Data</button>
     </div>
   </header>
 
-  <div class="disclaimer">
-    <strong>Operational Notice:</strong> AI can make mistakes; a person makes the final decision. River Watch recommends levels and crew deployments against Flood Plan v2026/27—the Duty Officer decides by 16:00 and never dispatches a crew automatically.
+  <!-- Plain-English Decision Disclaimer -->
+  <div class="notice">
+    <strong>Human Decision Notice:</strong> River Watch checks live river forecasts, weather warnings, and team resources against Flood Plan v2026/27. <strong>The Duty Officer makes the final decision by 16:00</strong>—no crew is ever dispatched automatically.
   </div>
 
-  <div class="card">
-    <h2>1. Live Data Sources &amp; AI Backend Status</h2>
-    <div id="sourceStatus" style="font-size:0.86rem; color:var(--muted); line-height:1.65;">
-      Initializing live source check...
+  <!-- At-a-Glance Summary Strip -->
+  <div class="kpi-grid" id="summaryCards">
+    <div class="kpi-card">
+      <div class="kpi-label">Overall Status</div>
+      <div class="kpi-value">Loading...</div>
+      <div class="kpi-sub">Checking 8 towns</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Barriers Needed</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-sub">High-flow alert</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Standby Watch</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-sub">Elevated flow or warning</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Mobile Crews Active</div>
+      <div class="kpi-value">—</div>
+      <div class="kpi-sub">3 regional crews available</div>
     </div>
   </div>
 
-  <div class="card">
-    <h2>2. Ask River Watch (Duty Officer &amp; Area Manager Console)</h2>
+  <!-- Interactive Assistant -->
+  <section class="card">
+    <div class="card-header">
+      <h2>Ask River Watch</h2>
+      <p>Click a common question below or type your own question in plain English.</p>
+    </div>
+
+    <div class="preset-label">Quick Questions:</div>
     <div class="presets">
-      <button type="button" class="preset-btn" data-q="What is tonight's plan?">What is tonight's plan?</button>
-      <button type="button" class="preset-btn" data-q="Why is Fermoy at that level?">Why is Fermoy at that level?</button>
-      <button type="button" class="preset-btn" data-q="What if the Suir at Clonmel reaches 150 m3/s?">What if the Suir at Clonmel reaches 150 m³/s?</button>
-      <button type="button" class="preset-btn" data-q="Which town should be first in line for a flood-defence study?">Which town should be first in line for a flood-defence study?</button>
-      <button type="button" class="preset-btn" data-q="Will my house in Mallow flood tonight?">Will my house in Mallow flood tonight?</button>
+      <button type="button" class="preset-btn" data-q="What is tonight's plan?">Tonight's Action Plan</button>
+      <button type="button" class="preset-btn" data-q="Why is Fermoy at that level?">Why is Fermoy at this level?</button>
+      <button type="button" class="preset-btn" data-q="What if the Suir at Clonmel reaches 150 m3/s?">What-If: Clonmel at 150 m³/s</button>
+      <button type="button" class="preset-btn" data-q="Which town should be first in line for a flood-defence study?">Flood-Defence Study Priority</button>
+      <button type="button" class="preset-btn" data-q="Will my house in Mallow flood tonight?">Public Query: My house in Mallow</button>
     </div>
 
     <div class="chat-box" id="chatBox">
       <div class="msg">
-        <div class="msg-role">System</div>
-        <div class="msg-body">Connected to live Google Sheet, Open-Meteo GloFAS forecasts, Met Éireann warnings, and server-side Groq AI proxy. Click a question above or type your own below.</div>
+        <div class="msg-role">River Watch Assistant</div>
+        <div class="msg-body">
+          <p>Ready. I have checked live river forecasts, Met Éireann warnings, and your team's Google Sheet. Click any quick question above or ask a question below.</p>
+        </div>
       </div>
     </div>
 
-    <div style="display:flex; gap:10px;">
-      <input id="questionInput" type="text" placeholder="Ask about tonight's plan, a specific town, a what-if flow, or the flood-defence study..." />
-      <button type="button" id="askBtn" style="white-space:nowrap;">Ask River Watch</button>
-      <button type="button" id="clearBtn" class="secondary" style="white-space:nowrap;">Clear</button>
+    <div class="input-row">
+      <input id="questionInput" type="text" placeholder="Type a question (e.g. What is tonight's plan? or How are crews assigned?)..." />
+      <button type="button" id="askBtn">Ask</button>
+      <button type="button" id="clearBtn" class="secondary">Clear</button>
     </div>
-  </div>
+  </section>
 
-  <div class="card">
-    <h2>3. Working Shown — Live Computed Flood Plan State</h2>
+  <!-- Town-by-Town Status Table -->
+  <section class="card">
+    <div class="card-header">
+      <h2>Town-by-Town River &amp; Resource Status</h2>
+      <p>Live 3-day peak river discharge compared against each town's Flood Plan thresholds.</p>
+    </div>
+
     <div class="table-wrap">
-      <table>
+      <table class="town-table">
         <thead>
           <tr>
-            <th>Town (County)</th>
-            <th>River</th>
-            <th>Effective Peak (m³/s)</th>
-            <th>95th / 99th Pct</th>
-            <th>% Above 99th</th>
-            <th>Active Warning (48h)</th>
-            <th>Recommended Level</th>
-            <th>Crew &amp; Barriers</th>
-            <th>Sheet Notes</th>
+            <th>Town &amp; River</th>
+            <th>3-Day Peak Flow</th>
+            <th>Flood Thresholds</th>
+            <th>Weather Warning</th>
+            <th>Action Level</th>
+            <th>Crew &amp; Recommended Action</th>
           </tr>
         </thead>
         <tbody id="planTableBody">
-          <tr><td colspan="9" style="color:var(--muted)">Loading live Sheet, forecasts, and warnings...</td></tr>
+          <tr><td colspan="6" style="color:var(--muted)">Loading live town status...</td></tr>
         </tbody>
       </table>
     </div>
-    <details>
-      <summary>Inspect Full JSON Payload (Audit Trail)</summary>
-      <pre class="audit" id="auditJson">Waiting for first evaluation...</pre>
-    </details>
-  </div>
+
+    <div class="legend">
+      <span><strong>Normal:</strong> Below Standby threshold</span>
+      <span><strong>Standby:</strong> At/above Standby threshold (or Orange/Red rain warning)</span>
+      <span><strong>Barriers:</strong> At/above Barrier threshold — deploy barriers before 18:00</span>
+    </div>
+  </section>
+
+  <!-- Technical Audit Collapsible -->
+  <details class="audit-panel">
+    <summary>Data Sources &amp; Technical Audit Trail (For Verification &amp; Marking)</summary>
+    <div id="sourceStatus" style="margin-top:10px; line-height:1.6;">Loading source status...</div>
+    <pre class="audit-json" id="auditJson">Waiting for live data...</pre>
+  </details>
+
 </div>
 
 <script>
@@ -176,6 +636,81 @@
   };
 
   let chatHistory = [];
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function formatAiReply(rawText) {
+    const lines = escapeHtml(rawText).split(/\r?\n/);
+    let html = "";
+    let inTable = false;
+    let inList = false;
+
+    function inlineFormat(s) {
+      return s
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*(.+?)\*/g, "<em>$1</em>");
+    }
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+
+      if (line.indexOf("|") === 0 && line.lastIndexOf("|") === line.length - 1 && line.length > 2) {
+        if (inList) { html += "</ul>"; inList = false; }
+        const cells = line.slice(1, -1).split("|").map(function (c) { return c.trim(); });
+        if (cells.every(function (c) { return /^[-:]+$/.test(c); })) continue;
+
+        if (!inTable) {
+          html += '<div class="ai-table-wrap"><table class="ai-table"><thead><tr>' +
+            cells.map(function (c) { return "<th>" + inlineFormat(c) + "</th>"; }).join("") +
+            "</tr></thead><tbody>";
+          inTable = true;
+        } else {
+          html += "<tr>" +
+            cells.map(function (c) { return "<td>" + inlineFormat(c) + "</td>"; }).join("") +
+            "</tr>";
+        }
+        continue;
+      } else if (inTable) {
+        html += "</tbody></table></div>";
+        inTable = false;
+      }
+
+      if (line === "---" || line === "***") {
+        if (inList) { html += "</ul>"; inList = false; }
+        html += "<hr>";
+        continue;
+      }
+
+      if (/^#{1,3}\s+/.test(line)) {
+        if (inList) { html += "</ul>"; inList = false; }
+        html += "<h4>" + inlineFormat(line.replace(/^#{1,3}\s+/, "")) + "</h4>";
+        continue;
+      }
+
+      if (/^[-*•]\s+/.test(line)) {
+        if (!inList) { html += "<ul>"; inList = true; }
+        html += "<li>" + inlineFormat(line.replace(/^[-*•]\s+/, "")) + "</li>";
+        continue;
+      } else if (inList) {
+        html += "</ul>";
+        inList = false;
+      }
+
+      if (line !== "") {
+        html += "<p>" + inlineFormat(line) + "</p>";
+      }
+    }
+
+    if (inTable) html += "</tbody></table></div>";
+    if (inList) html += "</ul>";
+    return html;
+  }
 
   function parseCsv(text) {
     const rows = [];
@@ -446,18 +981,18 @@
     for (let m = 0; m < townsEvaluated.length; m++) {
       const t = townsEvaluated[m];
       if (t.recommended_level === "Normal") {
-        t.operational_action = "Normal monitoring; no standby or barrier deployment required.";
+        t.operational_action = "Routine monitoring only";
       } else if (t.recommended_level === "Standby") {
-        t.operational_action = "Standby: confirm " + t.staff_on_call + " staff on call, check " + t.pumps + " pumps, stage " + t.sandbags + " sandbags.";
+        t.operational_action = "Standby: " + t.staff_on_call + " staff on call, check " + t.pumps + " pumps & " + t.sandbags + " sandbags";
       } else if (t.recommended_level === "Barriers") {
         if (!t.can_have_barriers) {
           t.area_manager_flag = true;
-          t.operational_action = "FLAGGED TO AREA MANAGER (no barrier set available — " + t.notes + "). Execute all Standby measures.";
+          t.operational_action = "Escalate to Area Manager (no barrier set available) + Standby measures";
         } else if (t.assigned_crew) {
-          t.operational_action = "Deploy " + t.assigned_crew + " to erect " + t.barrier_sets_available + " barrier set(s) before 18:00, plus Standby measures.";
+          t.operational_action = "Deploy " + t.assigned_crew + " to erect " + t.barrier_sets_available + " barrier set before 18:00";
         } else {
           t.area_manager_flag = true;
-          t.operational_action = "FLAGGED TO AREA MANAGER (no mobile crew capacity available in zone). Execute all Standby measures.";
+          t.operational_action = "Escalate to Area Manager (no crew capacity in zone) + Standby measures";
         }
       }
     }
@@ -496,42 +1031,91 @@
       }
     };
 
-    renderPlanTable(state);
+    renderDashboard(state);
     return state;
   }
 
-  function renderPlanTable(state) {
-    document.getElementById("sourceStatus").innerHTML =
-      "<strong>Last Live Fetch:</strong> " + state.fetched_at_utc + " &nbsp;|&nbsp; " +
-      "<strong>AI Backend:</strong> Google Apps Script Server-Side Proxy (" + GROQ_MODEL + " on GroqCloud)<br>" +
-      "<strong>History File:</strong> " + state.sources.historical_summary_file + " &nbsp;|&nbsp; " +
-      "<strong>Met Eireann Feed:</strong> " + state.sources.weather_warnings_api + " (" + state.national_active_warnings_count + " active warnings)";
+  function renderDashboard(state) {
+    const timeLabel = new Date(state.fetched_at_utc).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    document.getElementById("lastUpdatedBadge").textContent = "Live data updated at " + timeLabel;
 
+    // Render KPI Summary Cards
+    const barriersTowns = state.towns.filter(function (t) { return t.recommended_level === "Barriers"; });
+    const standbyTowns = state.towns.filter(function (t) { return t.recommended_level === "Standby"; });
+    const activeCrews = state.crews.filter(function (c) { return c.assigned.length > 0; });
+
+    let overallTitle = "All 8 Towns Normal";
+    let overallSub = "No flood action required tonight";
+    if (barriersTowns.length > 0) {
+      overallTitle = "Barrier Deployment Alert";
+      overallSub = barriersTowns.length + " town(s) require immediate barriers";
+    } else if (standbyTowns.length > 0) {
+      overallTitle = "Standby Watch Active";
+      overallSub = standbyTowns.length + " town(s) on standby monitoring";
+    }
+
+    document.getElementById("summaryCards").innerHTML =
+      '<div class="kpi-card">' +
+        '<div class="kpi-label">Overall Status</div>' +
+        '<div class="kpi-value">' + overallTitle + '</div>' +
+        '<div class="kpi-sub">' + overallSub + '</div>' +
+      '</div>' +
+      '<div class="kpi-card">' +
+        '<div class="kpi-label">Barriers Needed</div>' +
+        '<div class="kpi-value">' + barriersTowns.length + ' Town' + (barriersTowns.length === 1 ? '' : 's') + '</div>' +
+        '<div class="kpi-sub">' + (barriersTowns.length ? barriersTowns.map(function (t) { return t.town; }).join(", ") : "None above barrier level") + '</div>' +
+      '</div>' +
+      '<div class="kpi-card">' +
+        '<div class="kpi-label">Standby Watch</div>' +
+        '<div class="kpi-value">' + standbyTowns.length + ' Town' + (standbyTowns.length === 1 ? '' : 's') + '</div>' +
+        '<div class="kpi-sub">' + (standbyTowns.length ? standbyTowns.map(function (t) { return t.town; }).join(", ") : "None on standby") + '</div>' +
+      '</div>' +
+      '<div class="kpi-card">' +
+        '<div class="kpi-label">Mobile Crews Assigned</div>' +
+        '<div class="kpi-value">' + activeCrews.length + ' of 3 Crews</div>' +
+        '<div class="kpi-sub">' + (activeCrews.length ? activeCrews.map(function (c) { return c.name + " → " + c.assigned.join(", "); }).join("; ") : "All crews on base readiness") + '</div>' +
+      '</div>';
+
+    // Render Town Table
     const tbody = document.getElementById("planTableBody");
     tbody.innerHTML = state.towns.map(function (t) {
-      const peakSub = t.rehearsal_flow_used
-        ? '<span class="pill rehearsal">REHEARSAL</span>'
-        : '<br><span style="color:var(--muted);font-size:0.76rem">Peak date: ' + (t.live_peak_date || "N/A") + '</span>';
-      const pctText = t.pct_above_p99 !== null
-        ? (t.pct_above_p99 > 0 ? "+" : "") + t.pct_above_p99 + "%"
-        : "N/A";
-      const warnBadge = t.rehearsal_warning_used ? '<span class="pill rehearsal">REHEARSAL</span>' : "";
-      const crewText = t.assigned_crew
-        ? "<strong>" + t.assigned_crew + "</strong>"
-        : (t.area_manager_flag ? '<span style="color:#fca5a5;font-weight:600">Flag Area Mgr</span>' : "—");
+      const maxScale = Math.max(t.p99_m3s * 1.2, (t.effective_peak_m3s || 0) * 1.1, 1);
+      const pctBar = t.effective_peak_m3s !== null ? Math.min(100, Math.max(6, Math.round((t.effective_peak_m3s / maxScale) * 100))) : 0;
 
-      return "<tr>" +
-        "<td><strong>" + t.town + "</strong><br><span style='color:var(--muted);font-size:0.78rem'>" + t.counties.join(", ") + "</span></td>" +
-        "<td>" + t.river + "</td>" +
-        "<td><strong>" + (t.effective_peak_m3s !== null ? t.effective_peak_m3s : "N/A") + "</strong> " + peakSub + "</td>" +
-        "<td>" + t.p95_m3s + " / <strong>" + t.p99_m3s + "</strong></td>" +
-        "<td>" + pctText + "</td>" +
-        "<td>" + t.effective_warning + " " + warnBadge + "</td>" +
-        "<td><span class='pill " + t.recommended_level + "'>" + t.recommended_level + "</span></td>" +
-        "<td>" + crewText + "</td>" +
-        "<td style='max-width:230px;font-size:0.78rem;color:var(--muted)'>" + t.notes + "</td>" +
-        "</tr>";
+      const peakMeta = t.rehearsal_flow_used
+        ? '<span class="badge rehearsal">Test Override</span>'
+        : '<span style="color:var(--muted);font-size:0.78rem">Peak on ' + (t.live_peak_date || "N/A") + '</span>';
+
+      const warnText = t.effective_warning === "None"
+        ? '<span style="color:var(--muted)">No active rain warning</span>'
+        : '<strong>' + t.effective_warning + ' Rain Warning</strong>' + (t.rehearsal_warning_used ? ' <span class="badge rehearsal">Test Override</span>' : '');
+
+      const noteLine = t.notes && t.notes !== "Normal service"
+        ? '<div style="color:var(--muted);font-size:0.78rem;margin-top:3px">Note: ' + escapeHtml(t.notes) + '</div>'
+        : '';
+
+      return '<tr>' +
+        '<td><strong>' + escapeHtml(t.town) + '</strong><br><span style="color:var(--muted);font-size:0.8rem">River ' + escapeHtml(t.river) + ' (' + escapeHtml(t.counties.join(", ")) + ')</span></td>' +
+        '<td>' +
+          '<div><strong>' + (t.effective_peak_m3s !== null ? t.effective_peak_m3s + ' m³/s' : 'N/A') + '</strong> ' + peakMeta + '</div>' +
+          '<div class="flow-meter"><div class="flow-fill ' + t.recommended_level + '" style="width:' + pctBar + '%"></div></div>' +
+        '</td>' +
+        '<td style="font-size:0.82rem;color:var(--muted)">' +
+          'Standby: <strong style="color:var(--text)">' + t.p95_m3s + '</strong> m³/s<br>' +
+          'Barriers: <strong style="color:var(--text)">' + t.p99_m3s + '</strong> m³/s' +
+        '</td>' +
+        '<td style="font-size:0.84rem">' + warnText + '</td>' +
+        '<td><span class="badge ' + t.recommended_level + '">' + t.recommended_level + '</span></td>' +
+        '<td style="font-size:0.84rem">' + escapeHtml(t.operational_action) + noteLine + '</td>' +
+      '</tr>';
     }).join("");
+
+    // Render Technical Audit Footer
+    document.getElementById("sourceStatus").innerHTML =
+      "<strong>UTC Timestamp:</strong> " + state.fetched_at_utc + "<br>" +
+      "<strong>AI Proxy:</strong> Google Apps Script Server-Side Proxy (" + GROQ_MODEL + " on GroqCloud)<br>" +
+      "<strong>Historical Data:</strong> " + state.sources.historical_summary_file + "<br>" +
+      "<strong>Met Éireann Feed:</strong> " + state.sources.weather_warnings_api + " (" + state.national_active_warnings_count + " national warnings checked)";
 
     document.getElementById("auditJson").textContent = JSON.stringify(state, null, 2);
   }
@@ -540,7 +1124,8 @@
     try {
       await computeLiveFloodPlan();
     } catch (err) {
-      document.getElementById("sourceStatus").innerHTML = "<span style='color:#fca5a5'>Error loading live sources: " + err.message + "</span>";
+      document.getElementById("lastUpdatedBadge").textContent = "Error refreshing live feeds";
+      document.getElementById("sourceStatus").innerHTML = "<span style='color:#dc2626'>Error: " + escapeHtml(err.message) + "</span>";
     }
   }
 
@@ -573,12 +1158,12 @@
     return [
       "You are River Watch for an 8-town Irish flood team under Flood Plan v2026/27.",
       "RULES:",
-      "- Answer ONLY what is asked, concisely (under 250 words), using ONLY the verified data below. Do NOT add unasked What-If or Flood Study sections.",
+      "- Write in clear, plain English for Duty Officers and Area Managers. Answer ONLY what is asked (under 220 words), using ONLY the verified data below. Do NOT add unasked What-If or Flood Study sections.",
       "- Levels: Normal (< p95), Standby (>= p95), Barriers (>= p99). Orange/Red rain warning in 48h raises level by 1 step; Yellow changes nothing.",
       "- Rule 5: Explicitly state whenever a rehearsal override (rehearsal_flow=true or rehearsal_warn=true) from the Google Sheet was used.",
       "- Rule 7: Only flag a town with 0 barrier sets to the Area Manager when its recommended Level reaches Barriers (never when Normal or Standby).",
       "- What-if questions: Recalculate hypothetically using p95/p99 and crew rules while labeling it hypothetical.",
-      "- Rule 8 (Area Manager study, winters 1 Oct-31 Mar 2016/17-2024/25): Top towns: " + studyLines + ". Limitations: counts consecutive runs >= p99 only; does not show damage, event duration, or existing defences.",
+      "- Rule 8 (Area Manager study, winters 1 Oct-31 Mar 2016/17-2024/25): Top towns: " + studyLines + ". Always state both the last 4 winters vs first 4 winters comparison and what the count cannot tell (damage, event duration, or existing defences).",
       "- Rule 9 (Out of scope: individual houses, roads, coastal/tidal, insurance): Refuse politely and refer to the council's area office.",
       "- End with 1 short line: River Watch recommends only; the Duty Officer decides by 16:00.",
       "FETCHED UTC: " + state.fetched_at_utc + " | Sources: Google Sheet CSV, Open-Meteo GloFAS v4, Met Eireann JSON (" + state.national_active_warnings_count + " active warnings), history_summary.json.",
@@ -601,13 +1186,17 @@
   function appendMessage(role, text) {
     const box = document.getElementById("chatBox");
     const div = document.createElement("div");
-    div.className = "msg";
+    div.className = "msg" + (role === "user" ? " user-msg" : "");
     const roleDiv = document.createElement("div");
-    roleDiv.className = "msg-role" + (role === "user" ? " user" : "");
-    roleDiv.textContent = role === "user" ? "Duty Officer / Area Manager" : "River Watch AI";
+    roleDiv.className = "msg-role";
+    roleDiv.textContent = role === "user" ? "Your Question" : "River Watch Recommendation";
     const bodyDiv = document.createElement("div");
     bodyDiv.className = "msg-body";
-    bodyDiv.textContent = text;
+    if (role === "user") {
+      bodyDiv.textContent = text;
+    } else {
+      bodyDiv.innerHTML = formatAiReply(text);
+    }
     div.appendChild(roleDiv);
     div.appendChild(bodyDiv);
     box.appendChild(div);
@@ -616,7 +1205,8 @@
 
   function clearChat() {
     chatHistory = [];
-    document.getElementById("chatBox").innerHTML = "";
+    document.getElementById("chatBox").innerHTML =
+      '<div class="msg"><div class="msg-role">River Watch Assistant</div><div class="msg-body"><p>Conversation cleared. Click a quick question above or type a new question below.</p></div></div>';
   }
 
   async function sendQuestion() {
@@ -627,6 +1217,7 @@
 
     input.value = "";
     btn.disabled = true;
+    btn.textContent = "Checking...";
     appendMessage("user", question);
     chatHistory.push({ role: "user", content: question });
 
@@ -642,6 +1233,7 @@
       appendMessage("assistant", "Error: " + err.message);
     } finally {
       btn.disabled = false;
+      btn.textContent = "Ask";
     }
   }
 
